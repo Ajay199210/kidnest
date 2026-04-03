@@ -1,0 +1,81 @@
+﻿@model IEnumerable<KidNest.Web.ViewModels.MD.Sizes.MdSizeIndexViewModel>
+
+@{
+    ViewData["Title"] = "MD Sizes";
+}
+
+<h1>MD - Colors List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create new</a>
+</p>
+<div class="table-responsive">
+    <table class="table table-dark table-striped table-hover align-middle text-center" id="mdSizesTable">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SizeCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.IsActive)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SizeCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @if (item.IsActive.HasValue)
+                        {
+                            if (item.IsActive.Value)
+                            {
+                                <span class="badge bg-success">Yes</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">No</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">N/A</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-controller="MdSizes" class="btn btn-sm btn-warning"
+                           asp-route-id="@item.Id">Edit</a>
+                        <a asp-action="Details" asp-controller="MdSizes" class="btn btn-sm btn-info"
+                           asp-route-id="@item.Id">Details</a>
+                        <a asp-action="Delete" asp-controller="MdSizes" class="btn btn-sm btn-danger"
+                           asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#mdColorsTable').DataTable();
+        });
+    </script>
+}

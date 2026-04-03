@@ -1,0 +1,28 @@
+﻿@model KidNest.Web.ViewModels.Products.ProductsGridViewModel
+
+@* <div class="container-fluid gallery p-3 p-md-0 ps-md-5"> *@
+<div class="container-fluid gallery">
+    <div class="row">
+        <!-- Products Grid -->
+        <div class="col-md-10 my-3">
+            <h1 class="mx-auto text-center px-4 py-2 my-4 fw-bold bg-gradient border-top border-bottom shadow w-50 w-lg-25">@Model.Title</h1>
+            <div class="row g-3 my-3 mx-4">
+                @foreach (var productCardVM in Model.Products)
+                {
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        @await Html.PartialAsync("_ProductCardPartial", productCardVM)
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Ads Aside -->
+        @await Component.InvokeAsync("AdsMenu")
+    </div>
+</div>
+
+<style>
+    h1 {
+        font-family: 'Dancing Script', cursive;
+    }
+</style>

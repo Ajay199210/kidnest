@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Users";
+}
+
+<h1>Users List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create new</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-dark table-striped table-hover align-middle text-center" id="usersTable">
+        <thead class="border">
+            <tr>
+                <th>Id</th>
+                <th>Full Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Is Active</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Filled dynamically by DataTables -->
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            const table = $('#usersTable').DataTable({
+                processing: false, // show visual processing indicator
+                serverSide: true, // enable server side processing
+                stateSave: true, // preserves sort/pagination state
+                ajax: {
+                    url: '@Url.Action("GetUsersData", "Users")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: function (d) {
+                        return JSON.stringify(d);
+                    }
+                },
+                columns: [
+                    { data: 'id' },
+                    { data: 'fullName' },
+                    { data: 'phoneNumber' },
+                    { data: 'email' },
+                    { data: 'isActive' },
+                    {
+                        data: 'id',
+                        render: function (data) {
+                            return `
+                                <a href="/Admin/Users/Edit/${data}" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="/Admin/Users/Details/${data}" class="btn btn-sm btn-info">Details</a>
+                                <a href="/Admin/Users/Delete/${data}" class="btn btn-sm btn-danger">Delete</a>`;
+                        },
+                        orderable: false
+                    },
+                ]
+            });
+        });
+    </script>
+}

@@ -1,0 +1,125 @@
+﻿@model KidNest.Web.ViewModels.Users.UserRegisterViewModel;
+
+@{
+    ViewData["Title"] = "Create a new account";
+}
+
+<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-6 col-lg-4 m-4 p-5 pb-4 form-container rounded-5 rounded-sm-0">
+            <div class="logo-container text-center mb-3">
+                <a asp-action="Index" asp-controller="Home">
+                    <img src="~/img/logo/logo.png" class="form-logo p-2 img-fluid" alt="Logo">
+                </a>
+            </div>
+            <div class="mt-0">
+                <h3 class="mb-2">Register</h3>
+                <hr />
+                <p class="">Welcome! Create a new account. </p>
+            </div>
+            @await Html.PartialAsync("_ValidationSummary")
+            <form asp-action="Register">
+                @* <div asp-validation-summary="ModelOnly" class="text-danger fw-bold"></div> *@
+                <div class="mb-3">
+                    <!-- <label for="inputFullname" class="form-label">Email address</label> -->
+                    <input type="text" class="form-control rounded-3 border border-secondary" id="inputFullName"
+                           aria-describedby="fullname" placeholder="Full Name" asp-for="FullName" autofocus required>
+                    <span asp-validation-for="FullName" class="text-danger fw-semibold"></span>
+                </div>
+                <div class="mb-3">
+                    <!-- <label for="inputUsernameEmail" class="form-label">Email address</label> -->
+                    <input class="form-control rounded-3 border border-secondary" id="inputUsernameEmail"
+                           aria-describedby="usernameOrEmailHelp" placeholder="Phone number or email" asp-for="EmailOrPhone" required>
+                    <div id="usernameOrEmailHelp" class="form-text fst-italic">We'll never share your info with anyone else.</div>
+                    <span asp-validation-for="EmailOrPhone" class="text-danger fw-semibold"></span>
+                </div>
+                <div class="mb-3">
+                    <!-- <label for="inputUserAddress" class="form-label">Email address</label> -->
+                    <input class="form-control rounded-3 border border-secondary" id="inputUserAddress"
+                           aria-describedby="address" placeholder="Address" asp-for="Address" required>
+                    <div class="form-text fst-italic">Your delivery address</div>
+                    <span asp-validation-for="Address" class="text-danger fw-semibold"></span>
+                </div>
+                <div class="mb-3 position-relative">
+                    <input type="password" class="form-control rounded-3 border border-secondary pe-5" 
+                        id="inputPassword" placeholder="Password" asp-for="Password" required />
+                    <span toggle="#inputPassword" id="togglePassword" class="position-absolute end-0 eye-field-icon me-3" style="top: 7px;">
+                        <i class="fa-solid fa-eye"></i>
+                    </span>
+                    <span asp-validation-for="Password" class="text-danger fw-semibold"></span>
+                </div>
+                <div class="mb-3 position-relative">
+                    <input type="password" class="form-control rounded-3 border border-secondary pe-5" id="inputConfirmPassword"
+                           placeholder="Confirm password" asp-for="ConfirmPassword" required />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger fw-semibold"></span>
+                </div>
+                <button type="submit" class="btn btn-dark rounded-pill w-100 mt-3">SUBMIT</button>
+            </form>
+            <div class="text-center mt-3 small">
+                Have an account?
+                <a asp-action="Login" asp-controller="Account" class="text-dark">Login here</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        background-image: url("../img/store/store.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+        max-width: 100%;
+        position: relative;
+    }
+
+        .container:after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            content: '';
+            background: #000;
+            opacity: .5;
+            z-index: -1;
+        }
+
+    .form-logo {
+        height: auto;
+        width: 250px;
+    }
+
+    .form-container {
+        background-color: rgba(var(--bs-primary-rgb), 0.9);
+        color: black;
+        width: 100%;
+        max-width: 450px;
+    }
+
+</style>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password
+            const togglePassword = document.getElementById("togglePassword");
+            const inputPassword = document.getElementById("inputPassword");
+            const eyeIcon = togglePassword.querySelector('i');
+
+            togglePassword.addEventListener('click', function () {
+
+                if (inputPassword.type == 'password') {
+                    inputPassword.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    inputPassword.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<KidNest.Web.ViewModels.Contents.ContentIndexViewModel>
+
+@{
+    ViewData["Title"] = "Contents";
+}
+
+<h1>Contents List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create new</a>
+</p>
+<div class="table-responsive">
+    <table class="table table-dark table-striped table-hover align-middle text-center" id="contentsTable">
+        @if (Model.Count() > 0)
+        {
+            <thead class="border">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Type)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Type)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsActive)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-controller="Contents" class="btn btn-sm btn-warning" 
+                                asp-route-id="@item.Id">Edit</a>
+                            <a asp-action="Details" asp-controller="Contents" class="btn btn-sm btn-info"
+                                asp-route-id="@item.Id">Details</a>
+                            <a asp-action="Delete" asp-controller="Contents" class="btn btn-sm btn-danger"
+                                asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            <thead>
+                <tr>
+                    <th>Results</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        No results. Click <a class="text-warning" asp-action="Create">here</a>
+                        to add new contents.
+                    </td>
+                </tr>
+            </tbody>
+        }
+
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#contentsTable').DataTable();
+        });
+    </script>
+}

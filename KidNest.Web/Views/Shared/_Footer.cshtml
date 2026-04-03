@@ -1,0 +1,35 @@
+﻿<div class="container-fluid px-4 px-md-3">
+    <!-- Top Footer Part -->
+    <div class="d-flex flex-column flex-md-row align-items-center justify-content-md-end text-center text-md-end py-2">
+        <p class="fw-semibold text-dark mb-2 mb-md-0 me-md-3">
+            Get connected with us on social networks:
+        </p>
+
+        <!-- Social Links from component -->
+        <div class="d-flex justify-content-center">
+            @await Component.InvokeAsync("PublicSettings", new { section = "SocialIcons" })
+        </div>
+    </div>
+
+
+    <!-- Middle Footer Part -->
+    <div class="border-2 mb-3 text-center">
+        <!-- Logo -->
+        <a href="/" class="d-inline-block">
+            <img src="~/img/logo/logo.png" alt="KidNest" class="footer-logo">
+        </a>
+
+        <!-- Navigation -->
+        <ul class="nav justify-content-center gap-3 flex-wrap">
+            <li class="nav-item"><a asp-action="Index" asp-controller="Home" class="nav-link p-0">Home</a></li>
+            <li class="nav-item"><a asp-action="NewReleases" asp-controller="Products" class="nav-link p-0">New Releases</a></li>
+            <li class="nav-item"><a asp-action="HotDeals" asp-controller="Products" class="nav-link p-0">Hot Deals</a></li>
+            <!--<li class="nav-item"><a href="#" class="nav-link p-0">FAQs</a></li>-->
+        </ul>
+    </div>
+
+    <!-- Bottom Footer Part -->
+    <div class="text-center py-3 border-top text-muted small">
+        © 2025 KidNest, Inc. All rights reserved.
+    </div>
+</div>

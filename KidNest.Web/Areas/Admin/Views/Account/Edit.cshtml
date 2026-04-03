@@ -1,0 +1,64 @@
+﻿@model KidNest.Web.ViewModels.Users.AdminEditViewModel
+
+@{
+    ViewData["Title"] = "Account";
+}
+
+<h1>Account Info</h1>
+
+<h4>Hi @Model.FullName! Check or edit your account</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @await Html.PartialAsync("_ValidationSummary")
+        <form asp-action="Edit" class="d-grid gap-3">
+            @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+            <div class="form-group">
+                <label asp-for="FullName" class="control-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <div class="position-relative">
+                    <input asp-for="Password" class="form-control pe-5" type="password" placeholder="Password" id="PasswordInput" required />
+                    <span id="togglePassword" class="position-absolute top-50 translate-middle-y end-0 me-3" style="cursor: pointer;">
+                        <i class="fa-solid fa-eye"></i>
+                    </span>
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" /> |
+                <a asp-action="Details" class="btn btn-warning">More details</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Toggle password
+            $('#togglePassword').on('click', function () {
+                const input = $('#PasswordInput');
+                const icon = $(this).find('i');
+
+                const isPassword = input.attr('type') === 'password';
+                input.attr('type', isPassword ? 'text' : 'password');
+
+                icon.toggleClass('fa-eye fa-eye-slash');
+            });
+        });
+    </script>
+}

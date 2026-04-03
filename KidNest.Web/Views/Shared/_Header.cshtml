@@ -1,0 +1,119 @@
+﻿@using System.Security.Claims
+<div class="container-fluid">
+    <!-- Top Header Part -->
+    <div class="row bg-light align-items-center shadow">
+        <div class="col-md-12 contact-info d-flex justify-content-center align-items-center">
+            <!-- Contact Info -->
+            @await Component.InvokeAsync("PublicSettings", new { section = "ContactInfo" })
+        </div>
+    </div>
+    <!-- Middle Header Part -->
+    <div class="row align-items-center">
+        <div class="col-12 col-md-6 text-center text-md-start">
+            <div class="d-flex flex-column flex-md-row align-items-center">
+                <!-- Logo -->
+                <a asp-action="Index" asp-controller="Home">
+                    <img src="~/img/logo/logo.png" alt="KidNest" class="logo me-md-3 mb-3 mb-md-0" />
+                </a>
+                <!-- Search Bar with responsive width -->
+                <div class="w-75 w-md-100">
+                    <!-- Get Default.cshtml in Views/Shared/Components/SearchBar/Default.cshtml -->
+                    @await Component.InvokeAsync("SearchBar")
+                </div>
+            </div>
+        </div>
+        <!-- Navigation Links -->
+        <div class="col-12 col-md-6 text-center text-md-end my-3 my-md-0">
+            <ul class="nav justify-content-center justify-content-md-end align-items-center">
+               @*  <li class="nav-item">
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-globe"></i> EN
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </div>
+                </li> *@
+                @if (User.Identity!.IsAuthenticated)
+                {
+                    var userFullName = User.FindFirst(ClaimTypes.Name)?.Value;
+                    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle fw-bold text-decoration-none" 
+                            href="#" id="userDropdown" role="button" 
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Hello, @userFullName
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li>
+                                <a class="dropdown-item" asp-action="Update" asp-controller="Account">
+                                    Account Settings
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-action="History" asp-controller="Orders">
+                                    Orders History
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <form asp-action="Logout" asp-controller="Account" method="post" class="d-inline">
+                            <button type="submit" class="btn nav-link fw-bold border-0 bg-transparent">Logout</button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a asp-action="Login" asp-controller="Account" class="nav-link fw-bold">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="Register" asp-controller="Account" class="nav-link rounded-3 fw-bold">Register</a>
+                    </li>
+                }
+
+                <li class="nav-item">
+                    <div class="input-group">
+                        <span class="input-group-text text-bg-warning fw-bold px-2 border border-dark rounded-start-3" id="cartCount">0</span>
+                        <button class="btn btn-outline-dark rounded-end-pill rounded-start-0 border-start-0"
+                                type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#cartOffcanvas" aria-controls="cartOffcanvas">
+                            <i class="fa-solid fa-cart-shopping"></i> Cart
+                        </button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- Bottom Header Part -->
+    <div class="row bottom-header border-bottom border-top border-opacity-10 border-dark">
+        <div class="col-md-8">
+            <ul class="nav justify-content-md-start justify-content-center">
+                <li class="nav-item">
+                    <a asp-action="Index" asp-controller="Home" class="nav-link">
+                        <i class="fas fa-th-large me-1"></i> All
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-action="HotDeals" asp-controller="Products" class="nav-link">
+                        <i class="fas fa-fire text-danger me-1"></i> Hot Deals
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a asp-action="NewReleases" asp-controller="Products" class="nav-link">
+                        <i class="fas fa-star text-warning me-1"></i> New Releases
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <!-- Social Links -->
+            @await Component.InvokeAsync("PublicSettings", new { section = "SocialIcons" })
+        </div>
+    </div>
+</div>

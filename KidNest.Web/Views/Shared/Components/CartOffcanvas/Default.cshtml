@@ -1,0 +1,14 @@
+﻿@model List<KidNest.Services.DTOs.ShoppingCart.CartItemDTO>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel"
+    data-bs-scroll="true">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title">Shopping Cart</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div id="cartItemsContainer">
+            @await Html.PartialAsync("_CartItemsPartial", Model)
+        </div>
+    </div>
+</div>

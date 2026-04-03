@@ -1,0 +1,56 @@
+﻿@model KidNest.Web.ViewModels.Users.AdminLoginViewModel
+@{
+    ViewData["Title"] = "Admin Login";
+}
+
+<h2 class="text-center display-6 my-4">Login</h2>
+<div class="d-flex align-items-center justify-content-center align-items-center mb-2">
+    <div class="card shadow p-4" style="width: 350px;">
+        <form asp-action="Login" method="post">
+            @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+            @await Html.PartialAsync("_ValidationSummary")
+            <div class="mb-3">
+                <label class="form-label">Email or Phone</label>
+                <input asp-for="EmailOrPhone" class="form-control" autofocus required />
+                <span asp-validation-for="EmailOrPhone" class="text-danger"></span>
+            </div>
+            <div class="mb-3 position-relative">
+                <label class="form-label">Password</label>
+                <div class="input-group">
+                    <input asp-for="Password" class="form-control" type="password" id="PasswordInput" required />
+                    <button type="button" class="btn btn-outline-secondary" id="togglePassword" tabindex="-1">
+                        <i class="fa-solid fa-eye" id="passwordIcon"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="mb-3 form-check">
+                <input type="checkbox" asp-for="RememberMe" class="form-check-input" id="RememberMe" />
+                <label class="form-check-label" for="RememberMe">Remember Me</label>
+            </div>
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+            <button type="submit" class="btn btn-primary w-100">SIGN IN</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#togglePassword').on('click', function () {
+                const passwordInput = $('#PasswordInput');
+                const passwordIcon = $('#passwordIcon');
+                const isPassword = passwordInput.attr('type') === 'password';
+
+                // Toggle input type
+                passwordInput.attr('type', isPassword ? 'text' : 'password');
+
+                if (isPassword) {
+                    passwordIcon.removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    passwordIcon.removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            });
+        });
+    </script>
+}

@@ -1,0 +1,196 @@
+﻿@model KidNest.Web.ViewModels.Products.ProductViewModel
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container py-4">
+    <!-- Navigation Breadcrump -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="text-secondary" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="text-secondary" asp-controller="Categories" asp-action="Details" 
+                    asp-route-id="@Model.CategoryId">@Model.CategoryName</a>
+            </li>
+            <li class="breadcrumb-item active text-dark" aria-current="page">
+                @Model.Name
+            </li>
+        </ol>
+    </nav>
+    <div class="row g-5">
+        <!-- Product Image -->
+        <div class="col-md-6">
+            <img src="@Model.ImagePath" alt="@Model.Name" class="img-fluid img-thumbnail prod-img rounded shadow-sm w-100" />
+            <!-- Optional: image thumbnails -->
+            <!-- Description -->
+            <p class="text-break my-4"><span class="fw-semibold">Description:</span> @Model.Description</p>
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <h2 class="fw-bold">@Model.Name</h2>
+            <p class="text-muted">
+                <a asp-action="Details" asp-controller="Categories" asp-route-id="@Model.CategoryId"
+                    class="text-muted text-decoration-none">@Model.CategoryName</a>
+            </p>
+
+            <!-- Rating -->
+            <div class="mb-2">
+               @*  @for (int i = 1; i <= 5; i++)
+                {
+                    if (i <= Math.Round(Model.Rating))
+                    {
+                        <i class="fas fa-star text-warning"></i>
+                    }
+                    else
+                    {
+                        <i class="fas fa-star text-secondary"></i>
+                    }
+                } *@
+                @* <small class="text-muted">(@Model.ReviewCount reviews)</small> *@
+            </div>
+
+            <hr />
+
+            <!-- Price and Discount -->
+            <div class="mb-3">
+                @if (Model.Discount > 0)
+                {
+                    @* var discountedPrice = Model.Price * (1 - (Model.Discount / 100.0m)); *@
+                    <h4 class="text-danger fw-bold mb-0">
+                        $@Model.DiscountedPrice?.ToString("F2")
+                        <span class="badge bg-danger ms-2">@Model.Discount% off</span>
+                    </h4>
+                    <small class="text-muted text-decoration-line-through">$@Model.Price</small>
+                }
+                else
+                {
+                    <h4 class="fw-bold">$@Model.Price</h4>
+                }
+            </div>
+
+            <!-- Description -->
+            @* <p class ="text-break"><span class="fw-semibold">Description:</span> @Model.Description</p> *@
+
+            <!-- Optional stock and shipping -->
+            @if (Model.Quantity > 0)
+            {
+                <!-- Add to Cart Box -->
+                <div class="border p-3 bg-light rounded w-75 shadow">
+                    <form id="addToCartForm">
+                        <input type="hidden" id="productId" value="@Model.Id" />
+                        <input type="hidden" id="productName" value="@Model.Name" />
+                        <input type="hidden" id="productImage" value="@Model.ImagePath" />
+                        <input type="hidden" id="productPrice" 
+                            value="@((Model.DiscountedPrice > 0 ? Model.DiscountedPrice : Model.Price))" />
+                        
+                        <div class="d-flex border p-3 rounded mb-2">
+                            <div class="d-flex flex-column">
+                                <div class="d-flex align-items-center mb-3">
+                                    <label class="me-2">Quantity:</label>
+                                    <input type="number" id="quantityInput" value="1" min="1" max="@Model.Quantity" 
+                                        class="form-control form-control-sm" style="max-width: 80px;" />
+                                </div>
+                                <!-- Product Variants: Color and Size Selection -->
+                                @if (Model.DistinctColors.Count > 0 || Model.DistinctSizes.Count > 0)
+                                {
+                                    <div class="d-flex flex-column gap-3 mb-3">
+                                        <!-- Colors -->
+                                        @if (Model.DistinctColors.Count > 0)
+                                        {
+                                            <div>
+                                                <label class="form-label mb-1">Colors:</label>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    @for (int i = 0; i < Model.DistinctColors.Count; i++)
+                                                    {
+                                                        var color = Model.DistinctColors[i];
+                                                        var inputId = $"colorOption{i+1}";
+
+                                                        <input type="radio" class="btn-check" name="selectedColor" id="@inputId"
+                                                               value="@color.Color" data-color-id=@color.ColorId 
+                                                               autocomplete="off" @(i == 0 ? "checked" : "") />
+                                                        <label class="btn btn-outline-secondary d-flex align-items-center gap-2" for="@inputId">
+                                                            <span class="color-circle-picker rounded-circle d-inline-block border border-secondary"
+                                                                  style="background-color: @color.ColorHex; width: 20px; height: 20px;"></span>
+                                                            @color.Color
+                                                        </label>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+
+                                        <!-- Sizes -->
+                                        @if (Model.DistinctSizes.Count > 0)
+                                        {
+                                            <div>
+                                                <label class="form-label mb-1">Sizes:</label>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    @for (int i = 0; i < Model.DistinctSizes.Count; i++)
+                                                    {
+                                                        var size = Model.DistinctSizes[i];
+                                                        var inputId = $"sizeOption{i+1}";
+
+                                                        <input type="radio" class="btn-check" name="selectedSize"
+                                                            id="@inputId" value="@size.SizeCode" 
+                                                            data-size-id=@size.SizeId autocomplete="off" 
+                                                            @(i == 0 ? "checked" : "")>
+                                                        <label class="btn btn-outline-secondary" for="@inputId">
+                                                            @size.SizeCode
+                                                        </label>
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <span id="quantityValidation" class="text-danger"></span>
+
+                        <div class="hstack mt-3 gap-3">
+                            <button type="button" class="btn w-100 btn-warning rounded-pill fw-bold add-to-cart"
+                                    data-id="@Model.Id"
+                                    data-name="@Model.Name"
+                                    data-img="@Model.ImagePath"
+                                    data-price="@(Model.DiscountedPrice > 0 ? Model.DiscountedPrice : Model.Price)">
+                                Add to Cart
+                            </button>
+                            <button type="button" class="btn w-100 btn-primary rounded-pill fw-bold" id="btnBuyNow"
+                                    data-id="@Model.Id"
+                                    data-name="@Model.Name"
+                                    @* data-img="@Model.ImagePath" *@
+                                    data-price="@(Model.DiscountedPrice > 0 ? Model.DiscountedPrice : Model.Price)">
+                                Buy now
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <br />
+                <p class="m-0 text-success fw-bold fs-5">In Stock</p>
+                <p class="text-muted fst-italic">
+                    <strong>Estimated Delivery Time</strong> 
+                    is provided by the shipping carrier and may vary by location
+                </p>
+            }
+            else
+            {
+                <p class="mt-3 text-danger fw-bold">
+                    <i class="fas fa-exclamation-triangle me-2"></i> Out of Stock
+                </p>
+                <p class="text-muted fst-italic">This item is currently unavailable.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Parallax Section -->
+@await Component.InvokeAsync("PublicSettings", new { section = "Parallax" })
+
+<!-- Scripts -->
+@section Scripts {
+    <script>
+        const productVariants = @Html.Raw(Json.Serialize(Model.Variants))
+    </script>
+}

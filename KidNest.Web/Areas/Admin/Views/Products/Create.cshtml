@@ -1,0 +1,268 @@
+﻿@model KidNest.Web.ViewModels.Products.ProductCreateViewModel
+
+@{
+    ViewData["Title"] = "Product Creation";
+    
+    // Prepare a dictionary with posted variant quantities keyed by "colorId_sizeId"
+    // Handles all possible combinations: colors+sizes, colors only, sizes only
+    var variantQuantities = Model.Variants?.ToDictionary(
+      v => $"{v.ColorId?.ToString() ?? "null"}_{v.SizeId?.ToString() ?? "null"}",
+      v => v.Quantity.ToString()
+    ) ?? new Dictionary<string, string>();
+
+    var variantQuantitiesJson = System.Text.Json.JsonSerializer.Serialize(variantQuantities);
+}
+
+<h1>New Product</h1>
+
+<h4>Add a new product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @await Html.PartialAsync("_ValidationSummary")
+        <form asp-action="Create" class="d-grid gap-3" enctype="multipart/form-data">
+            @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control">
+                    <option value="">-- Choose a category --</option>
+                </select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Barcode" class="control-label"></label>
+                <input asp-for="Barcode" class="form-control" />
+                <span asp-validation-for="Barcode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Discount" class="control-label"></label>
+                <input asp-for="Discount" class="form-control" />
+                <span asp-validation-for="Discount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quantity" class="control-label"></label>
+                <input asp-for="Quantity" class="form-control" />
+                <span asp-validation-for="Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SelectedColorIds"></label>
+                <select asp-for="SelectedColorIds" asp-items="Model.Colors" 
+                    class="form-control select2" multiple="multiple">
+                </select>
+                <span asp-validation-for="SelectedColorIds" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SelectedSizeIds"></label>
+                <select asp-for="SelectedSizeIds" asp-items="Model.Sizes"
+                        class="form-control select2" multiple="multiple">
+                </select>
+                <span asp-validation-for="SelectedSizeIds" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div id="variantsTableContainer"></div>
+                <div id="totalQuantitySummary" class="fw-bold"></div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageFile" class="control-label"></label>
+                <input asp-for="ImageFile" class="form-control-file" accept=".jpg,.jpeg,.png,.webp" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+            <div class="form-check">
+                <input asp-for="IsNewRelease" class="form-check-input" type="checkbox" />
+                <label asp-for="IsNewRelease" class="form-check-label">Mark as New Release</label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" /> |
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#SelectedColorIds').select2({
+                placeholder: 'Colors...',
+                closeOnSelect: false
+            });
+
+            $('#SelectedSizeIds').select2({
+                placeholder: 'Sizes...',
+                closeOnSelect: false
+            });
+
+            // Remove validation rules (if any were auto-added)
+            $('#SelectedColorIds').removeAttr('data-val');
+            $('#SelectedSizeIds').removeAttr('data-val');
+
+            // Generate a new table matrix on a new color/size selection
+            $('#SelectedColorIds, #SelectedSizeIds').on('change', generateVariantsMatrix);
+
+            // Rebuild matrix if there are preselected values (e.g. after validation error)
+            if ($('#SelectedColorIds').val()?.length > 0 || $('#SelectedSizeIds').val()?.length > 0) {
+                generateVariantsMatrix();
+            }
+
+            // Add validation on input change
+            $('#variantsTableContainer').on('input', '.variant-qty-input', function () {
+                validateQuantityInput($(this));
+                calculateAndDisplayTotalQuantity();
+            });
+
+            // Validate colors/sizes quantities on the client side
+            $('form').on('submit', function (e) {
+                let isValid = true;
+                let firstEmptyInput = null;
+
+                $('.variant-qty-input').each(function () {
+                    if (!validateQuantityInput($(this))) {
+                        isValid = false;
+                        if (!firstEmptyInput) {
+                            firstEmptyInput = $(this);
+                        }
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    firstEmptyInput.focus();
+                }
+            });
+        });
+
+        function generateVariantsMatrix() {
+            var serverVariantQuantities = @Html.Raw(variantQuantitiesJson);
+            // console.log(serverVariantQuantities)
+
+            const selectedColors = $('#SelectedColorIds').val() || [];
+            const selectedSizes = $('#SelectedSizeIds').val() || [];
+
+            if (selectedColors.length === 0 && selectedSizes.length === 0) {
+                $('#variantsTableContainer').html('');
+                $('#totalQuantitySummary').html('');
+                $('#Quantity').val(0);
+                return;
+            }
+
+            let tableHtml = '<table class="table table-bordered text-center align-middle">';
+            tableHtml += '<thead class="align-middle"><tr><th>Color \\ Size</th>';
+
+            // If sizes are selected, add each size as a header
+            selectedSizes.forEach(sizeId => {
+                const sizeText = $(`#SelectedSizeIds option[value="${sizeId}"]`).text();
+                tableHtml += `<th>${sizeText}</th>`;
+            });
+
+            // If no sizes selected, add a single 'Quantity' header column
+            if (selectedSizes.length === 0) {
+                tableHtml += '<th>Quantity</th>';
+            }
+
+            tableHtml += '</tr></thead><tbody>';
+
+            if (selectedColors.length > 0) {
+                selectedColors.forEach(colorId => {
+                    const colorText = $(`#SelectedColorIds option[value="${colorId}"]`).text();
+                    tableHtml += `<tr><td>${colorText}</td>`;
+
+                    if (selectedSizes.length > 0) {
+                        selectedSizes.forEach(sizeId => {
+                            const index = `${colorId}_${sizeId}`;
+                            // Pre-fill quantity value if exists in serverVariantQuantities
+                            const quantityValue = serverVariantQuantities && serverVariantQuantities[index] ? serverVariantQuantities[index] : '';
+                            tableHtml += `
+                                <td>
+                                    <input type="hidden" name="Variants.Index" value="${index}" />
+                                    <input type="hidden" name="Variants[${index}].ColorId" value="${colorId}" />
+                                    <input type="hidden" name="Variants[${index}].SizeId" value="${sizeId}" />
+                                    <input class="form-control variant-qty-input" type="number" name="Variants[${index}].Quantity" placeholder="Qty" min="0" required value="${quantityValue}" />
+                                </td>`;
+                        });
+                    } else {
+                        const index = `${colorId}_null`;
+                        const quantityValue = serverVariantQuantities && serverVariantQuantities[index] ? serverVariantQuantities[index] : '';
+                        tableHtml += `
+                            <td>
+                                <input type="hidden" name="Variants.Index" value="${index}" />
+                                <input type="hidden" name="Variants[${index}].ColorId" value="${colorId}" />
+                                <input class="form-control variant-qty-input" type="number" name="Variants[${index}].Quantity" placeholder="Qty" min="0" required value="${quantityValue}" />
+                            </td>`;
+                    }
+
+                    tableHtml += '</tr>';
+                });
+            } else {
+                tableHtml += '<tr><td>Default</td>';
+                selectedSizes.forEach(sizeId => {
+                    const sizeText = $(`#SelectedSizeIds option[value="${sizeId}"]`).text();
+                    const index = `null_${sizeId}`;
+                    const quantityValue = serverVariantQuantities && serverVariantQuantities[index] ? serverVariantQuantities[index] : '';
+                    tableHtml += `
+                        <td>
+                            <input type="hidden" name="Variants.Index" value="${index}" />
+                            <input type="hidden" name="Variants[${index}].SizeId" value="${sizeId}" />
+                            <input class="form-control variant-qty-input" type="number" name="Variants[${index}].Quantity" placeholder="Qty" min="0" required value="${quantityValue}" />
+                        </td>`;
+                });
+                tableHtml += '</tr>';
+            }
+
+            tableHtml += '</tbody></table>';
+            $('#variantsTableContainer').html(tableHtml);
+
+            // Bind events and calculate total
+            bindQuantityEvents();
+            calculateAndDisplayTotalQuantity();
+        }
+
+        function bindQuantityEvents() {
+            $('.variant-qty-input').on('input', calculateAndDisplayTotalQuantity);
+        }
+
+        function calculateAndDisplayTotalQuantity() {
+            let total = 0;
+            $('.variant-qty-input').each(function () {
+                const val = parseInt($(this).val(), 10);
+                if (!isNaN(val) && val >= 0) {
+                    total += val;
+                }
+            });
+
+            $('#totalQuantitySummary').html(`Total Quantity: <span class="text-success">${total}</span>`);
+            $('#Quantity').val(total); // update main quantity field
+        }
+
+        function validateQuantityInput($input) {
+            // Remove previous errors
+            $input.removeClass('is-invalid');
+            $input.next('.text-danger').remove();
+
+            const val = $input.val();
+            if (val === '' || isNaN(val) || parseInt(val) < 0) {
+                // Add invalid styles and message
+                $input.addClass('is-invalid');
+                $input.after('<div class="text-danger">Quantity must be zero or more.</div>');
+                return false;
+            }
+            return true;
+        }
+    </script>
+}

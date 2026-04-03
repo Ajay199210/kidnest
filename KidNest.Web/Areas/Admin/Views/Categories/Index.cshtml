@@ -1,0 +1,83 @@
+﻿@model IEnumerable<KidNest.Web.ViewModels.Categories.CategoryIndexViewModel>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<h1>Categories List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create new</a>
+</p>
+
+<div class="table-responsive">
+    <table class="table table-dark table-striped table-hover align-middle text-center" id="categoriesTable">
+        @if (Model.Count() > 0)
+        {
+            <thead class="border">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @(item.Description?.Length > 50
+                                ? $"{item.Description.Substring(0, 50)}..."
+                                : item.Description)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-controller="Categories" class="btn btn-sm btn-warning"
+                               asp-route-id="@item.Id">Edit</a>
+                            <a asp-action="Details" asp-controller="Categories" class="btn btn-sm btn-info"
+                               asp-route-id="@item.Id">Details</a>
+                            <a asp-action="Delete" asp-controller="Categories" class="btn btn-sm btn-danger"
+                               asp-route-id="@item.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            <thead class="border">
+                <tr>
+                    <th>Results</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        No results. Click <a class="text-warning" asp-action="Create">here</a>
+                        to add a new category.
+                    </td>
+                </tr>
+            </tbody>
+        }
+    </table>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#categoriesTable').DataTable();
+        });
+    </script>
+}

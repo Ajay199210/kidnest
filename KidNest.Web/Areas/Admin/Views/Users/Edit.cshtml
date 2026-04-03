@@ -1,0 +1,120 @@
+﻿@model KidNest.Web.ViewModels.Users.UserEditViewModel
+
+@{
+    ViewData["Title"] = "Account Modification";
+}
+
+<h1>Edit user account</h1>
+
+<h4>User #@Model.Id: @Model.FullName</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" class="d-grid gap-3">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" />
+                <span asp-validation-for="Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FullName" class="control-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmailOrPhone" class="control-label"></label>
+                <input asp-for="EmailOrPhone" class="form-control" />
+                <span asp-validation-for="EmailOrPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FullName" class="control-label"></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewPassword" class="control-label"></label>
+                <input asp-for="NewPassword" class="form-control" />
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmNewPassword" class="control-label"></label>
+                <input asp-for="ConfirmNewPassword" class="form-control" />
+                <span asp-validation-for="ConfirmNewPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Code" class="control-label"></label>
+                <input asp-for="Code" class="form-control" />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DOB" class="control-label"></label>
+                <input asp-for="DOB" class="form-control" />
+                <span asp-validation-for="DOB" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastLoginDate" class="control-label"></label>
+                <input asp-for="LastLoginDate" class="form-control" />
+                <span asp-validation-for="LastLoginDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastLogInPCName" class="control-label"></label>
+                <input asp-for="LastLogInPCName" class="form-control" />
+                <span asp-validation-for="LastLogInPCName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RowVersion" class="control-label"></label>
+                <input asp-for="RowVersion" class="form-control" />
+                <span asp-validation-for="RowVersion" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserUpdatedBy" class="control-label"></label>
+                <input asp-for="UserUpdatedBy" class="form-control" />
+                <span asp-validation-for="UserUpdatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastUpdated" class="control-label"></label>
+                <input asp-for="LastUpdated" class="form-control" />
+                <span asp-validation-for="LastUpdated" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserCreatedBy" class="control-label"></label>
+                <input asp-for="UserCreatedBy" class="form-control" />
+                <span asp-validation-for="UserCreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedDate" class="control-label"></label>
+                <input asp-for="CreatedDate" class="form-control" />
+                <span asp-validation-for="CreatedDate" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+                <label asp-for="IsActive" class="form-check-label">@Html.DisplayNameFor(model => model.IsActive)</label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" /> |
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,206 @@
+﻿@model KidNest.Web.ViewModels.Users.UserEditViewModel;
+
+@{
+    ViewData["Title"] = "Update account";
+}
+
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-6 col-lg-4 m-4 p-5 pb-4 form-container rounded-5 rounded-sm-0">
+            <div class="logo-container text-center mb-3">
+                <a asp-action="Index" asp-controller="Home">
+                    <img src="~/img/logo/logo.png" class="form-logo p-2 img-fluid" alt="Logo">
+                </a>
+            </div>
+            <div class="mt-0">
+                <h3 class="mb-2">@User.Identity!.Name</h3>
+                <hr />
+                <p class="fw-semibold">Welcome back! You can modify your account in this screen.</p>
+            </div>
+            <form asp-action="Update">
+                <div asp-validation-summary="ModelOnly" class="text-danger fw-bold"></div>
+                <div class="mb-3">
+                    <!-- <label for="inputFullname" class="form-label">Email address</label> -->
+                    <input type="text" class="form-control rounded-3 border border-secondary" id="inputFullName"
+                           aria-describedby="fullname" placeholder="Full Name" asp-for="FullName" autofocus>
+                    <span asp-validation-for="FullName" class="text-danger fw-bold"></span>
+                </div>
+                <div class="mb-3">
+                    <!-- <label for="InputUsernameEmail" class="form-label">Email address</label> -->
+                    <input class="form-control rounded-3 border border-secondary" id="InputUsernameEmail"
+                           aria-describedby="usernameOrEmailHelp" placeholder="Phonenumber or email" asp-for="EmailOrPhone">
+                    <div id="usernameOrEmailHelp" class="form-text fst-italic">We'll never share your info with anyone else.</div>
+                    <span asp-validation-for="EmailOrPhone" class="text-danger fw-bold"></span>
+                </div>
+                <div class="mb-3">
+                    <!-- <label for="inputUserAddress" class="form-label">Email address</label> -->
+                    <input class="form-control rounded-3 border border-secondary" id="inputUserAddress"
+                           aria-describedby="address" placeholder="Address" asp-for="Address">
+                    <div class="form-text fst-italic">Your delivery address</div>
+                    <span asp-validation-for="Address" class="text-danger fw-bold"></span>
+                </div>
+                <div class="mb-3 position-relative">
+                    <input type="password" class="form-control rounded-3 border border-secondary pe-5"
+                           id="inputPassword" placeholder="Password" asp-for="Password" />
+                    <span toggle="#inputPassword" id="togglePassword" class="position-absolute end-0 eye-field-icon me-3" style="top: 7px;">
+                        <i class="fa-solid fa-eye"></i>
+                    </span>
+                    <span asp-validation-for="Password" class="text-danger fw-bold"></span>
+                </div>
+                <div class="mb-3 position-relative">
+                    <input type="password" class="form-control rounded-3 border border-secondary pe-5" 
+                        id="inputNewPassword" placeholder="New password" asp-for="NewPassword" />
+                    <span toggle="#inputPassword" id="togglePassword" class="position-absolute end-0 eye-field-icon me-3" style="top: 7px;">
+                        <i class="fa-solid fa-eye"></i>
+                    </span>
+                    <span asp-validation-for="NewPassword" class="text-danger fw-bold"></span>
+                </div>
+                <div class="mb-3 position-relative">
+                    <input type="password" class="form-control rounded-3 border border-secondary pe-5" id="inputConfirmPassword"
+                           placeholder="Confirm new password" asp-for="ConfirmNewPassword" />
+                    <span asp-validation-for="ConfirmNewPassword" class="text-danger fw-bold"></span>
+                </div>
+                <button type="submit" class="btn btn-dark rounded-pill w-100 mt-4">SUBMIT</button>
+                <button type="button" id="btnCloseAccount" class="btn btn-danger rounded-pill w-100 mt-2" 
+                    data-bs-toggle="modal" data-bs-target="#confirmCloseAccountModal">
+                    CLOSE ACCOUNT
+                </button>
+            </form>
+            <div class="modal fade" id="confirmCloseAccountModal" tabindex="-1" aria-labelledby="confirmCloseAccountLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="confirmCloseAccountLabel">Confirm Account Closure</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form asp-action="Delete" asp-controller="Account" method="post" id="deleteAccountForm">
+                            @Html.AntiForgeryToken()
+                            <div class="modal-body">
+                                <p class="mb-3">Please confirm your password to permanently delete your account.</p>
+                                <div class="mb-3">
+                                    <input type="password" class="form-control" 
+                                        placeholder="Your password" name="Password" required />
+                                    <span id="deleteError" class="text-danger d-none my-1" role="alert"></span>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-danger rounded-pill">Yes, close account</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .container {
+        background-image: url("../../img/store/store.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-attachment: fixed;
+        min-height: 100vh;
+        max-width: 100%;
+        position: relative;
+    }
+
+        .container:after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            content: '';
+            background: #000;
+            opacity: .5;
+            z-index: -1;
+        }
+
+    .form-logo {
+        height: auto;
+        width: 250px;
+    }
+
+    .form-container {
+        background-color: rgba(var(--bs-primary-rgb), 0.9);
+        color: black;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password
+            const togglePassword = document.getElementById("togglePassword");
+            const inputPassword = document.getElementById("inputPassword");
+            const eyeIcon = togglePassword.querySelector('i');
+
+            togglePassword.addEventListener('click', function () {
+
+                if (inputPassword.type == 'password') {
+                    inputPassword.type = 'text';
+                    eyeIcon.classList.remove('fa-eye');
+                    eyeIcon.classList.add('fa-eye-slash');
+                } else {
+                    inputPassword.type = 'password';
+                    eyeIcon.classList.remove('fa-eye-slash');
+                    eyeIcon.classList.add('fa-eye');
+                }
+            });
+
+            // Delete user account
+            $('#deleteAccountForm').on('submit', function (e) {
+                e.preventDefault();
+                e.stopPropagation(); // Prevent any default form submission behavior
+
+                var form = $(this);
+                var formData = form.serialize();
+                var errorDiv = $('#deleteError');
+                errorDiv.addClass('d-none').text(''); // Reset error display
+
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: formData,
+                    dataType: 'json', // We still expect JSON for error responses
+                    success: function (response, status, xhr) {
+                        // 204 No Content response
+                        if (xhr.status === 204) {
+                            $('#confirmCloseAccountModal').modal('hide');
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Account Deleted',
+                                text: 'Your account has been deleted successfully!',
+                                footer: '<a href="/account/register">Create a new account?</a>',
+                                allowOutsideClick: false
+                            }).then(() => {
+                                window.location.href = '/'; // Redirect to home
+                            });
+                        }
+                        // Handle other success cases (if you still have them)
+                        else if (response && response.success) {
+                            $('#confirmCloseAccountModal').modal('hide');
+                            window.location.href = response.redirectUrl || '/';
+                        }
+                    },
+                    error: function (xhr) {
+                        let error = xhr.responseJSON || { message: "An unknown error occurred." };
+                        let messages = [];
+
+                        if (error.errors && Array.isArray(error.errors)) {
+                            messages = error.errors;
+                        } else if (error.message) {
+                            messages.push(error.message);
+                        }
+
+                        const errorDiv = $('#deleteError');
+                        errorDiv.html(messages.join('<br>')).removeClass('d-none');
+                    }
+                });
+            });
+        });
+    </script>
+}

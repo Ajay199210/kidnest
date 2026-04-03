@@ -1,0 +1,31 @@
+﻿@model KidNest.Web.ViewModels.Categories.CategoryProductsViewModel
+@{
+    ViewData["Title"] = "Category Products";
+}
+
+<div class="container gallery p-5">
+    <h1>Catalog: @Model.CategoryName</h1>
+    <!-- Navigation Breadcrump -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a class="text-secondary" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="breadcrumb-item active text-dark" aria-current="page">
+                @Model.CategoryName
+            </li>
+        </ol>
+    </nav>
+    <!-- Consistent grid system -->
+    <div class="row row-cols-1 row-cols-md-3 g-3">
+        @foreach (var productCardVM in Model.Products)
+        {
+            <div class="col">
+                @await Html.PartialAsync("_ProductCardPartial", productCardVM)
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Parallax Section -->
+@await Component.InvokeAsync("PublicSettings", new { section = "Parallax" })

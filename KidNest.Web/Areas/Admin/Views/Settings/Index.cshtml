@@ -1,0 +1,62 @@
+﻿@model KidNest.Web.ViewModels.Settings.PublicSettingsViewModel
+
+@{
+    ViewData["Title"] = "Settings Modification";
+}
+
+<h1>Edit Settings</h1>
+
+<h4>Site Public Settings</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @* <div asp-validation-summary="ModelOnly" class="text-danger"></div> *@
+        @await Html.PartialAsync("_ValidationSummary")
+        <form asp-action="Edit" class="d-grid gap-3" enctype="multipart/form-data">
+            <div class="form-group">
+                <label asp-for="ContactEmail" class="control-label"></label>
+                <input asp-for="ContactEmail" class="form-control" />
+                <span asp-validation-for="ContactEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactPhone" class="control-label"></label>
+                <input asp-for="ContactPhone" class="form-control" />
+                <span asp-validation-for="ContactPhone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FacebookUrl" class="control-label"></label>
+                <input asp-for="FacebookUrl" class="form-control" />
+                <span asp-validation-for="FacebookUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InstagramUrl" class="control-label"></label>
+                <input asp-for="InstagramUrl" class="form-control" />
+                <span asp-validation-for="InstagramUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ContactWhatsapp" class="control-label"></label>
+                <input asp-for="ContactWhatsapp" class="form-control" />
+                <span asp-validation-for="ContactWhatsapp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParallaxImageFile"></label>
+                <input asp-for="ParallaxImageFile" type="file" class="form-control-file" accept=".jpg,.jpeg,.png,.webp" />
+                <span asp-validation-for="ParallaxImageFile" class="text-danger"></span>
+            </div>
+
+            @if (Model.ParallaxImage != null)
+            {
+                <div>
+                    <p class="m-0">Current Image:</p>
+                    <img src="~/uploads/img/parallax/@Model.ParallaxImage" class="img-fluid img-thumbnail" 
+                        alt="Parallax Preview" style="max-width: 300px;" />
+                    <input type="hidden" asp-for="ParallaxImage" />
+                </div>
+            }
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" /> |
+                <a asp-action="Index" class="btn btn-secondary" asp-controller="Home">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>

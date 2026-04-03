@@ -1,0 +1,9 @@
+﻿@model KidNest.Web.ViewModels.Products.ProductsGridViewModel
+@{
+    ViewData["Title"] = "Hot Deals";
+}
+
+@await Html.PartialAsync("_ProductsGridPartial", Model)
+
+<!-- Parallax Section -->
+@await Component.InvokeAsync("PublicSettings", new { section = "Parallax" })

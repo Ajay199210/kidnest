@@ -1,0 +1,30 @@
+﻿.table-responsive thead th {
+    border: 1px solid whitesmoke;
+    justify-items: center;
+}
+    .table-responsive tbody td.dt-type-numeric,
+    .table-responsive tbody td.dt-type-date {
+        text-align: center;
+    }
+
+form input[type="checkbox"] {
+    cursor: pointer;
+}
+
+form .form-control-file {
+    display: block;
+}
+
+div:has(input[type="submit"]) {
+    margin-top: 1rem; /* equivalent to: mt-3 */
+}
+
+.color-circle {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 1px solid #ccc;
+    margin-right: 5px;
+    vertical-align: middle;
+}

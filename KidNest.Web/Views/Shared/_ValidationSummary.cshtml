@@ -1,0 +1,27 @@
+﻿@{
+    // Only get model-level errors (no property key = "")
+    var errorMessages = ViewData.ModelState
+        .Where(kvp => string.IsNullOrEmpty(kvp.Key))
+        .SelectMany(kvp => kvp.Value!.Errors)
+        .Select(e => e.ErrorMessage)
+        .ToList();
+}
+
+@if (errorMessages.Count > 0)
+{
+    <div class="alert alert-danger">
+        @if (errorMessages.Count == 1)
+        {
+            <p class="mb-0">@errorMessages[0]</p>
+        }
+        else
+        {
+            <ul class="mb-0">
+                @foreach (var error in errorMessages)
+                {
+                    <li>@error</li>
+                }
+            </ul>
+        }
+    </div>
+}

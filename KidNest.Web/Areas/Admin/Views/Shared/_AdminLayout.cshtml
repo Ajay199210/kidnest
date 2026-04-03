@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - Admin Panel</title>
+    <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+    <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/datatables/datatables.min.css" />
+    <link rel="stylesheet" href="~/lib/select2/css/select2.min.css" />
+    <link rel="stylesheet" href="~/css/admin.css" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-dark bg-dark navbar-expand-sm border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="Admin" asp-controller="Home" asp-action="Index">Admin Dashboard</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    @if (User.Identity!.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <ul class="navbar-nav flex-grow-1">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Products" asp-action="Index">Products</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Orders" asp-action="Index">Orders</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Contents" asp-action="Index">Contents</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" 
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Master Data
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="MdColors" asp-action="Index">Colors</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="Admin" asp-controller="MdSizes" asp-action="Index">Sizes</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                        </ul>
+
+                        <div class="d-flex align-items-center">
+                            <!-- User name on left on small screens, right on bigger -->
+                            <div class="flex-grow-1 d-flex justify-content-start justify-content-sm-end">
+                                <ul class="navbar-nav align-items-center gap-3 flex-row mb-0">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-light" data-bs-toggle="dropdown"
+                                           href="#" role="button" aria-expanded="false">@User.Identity.Name</a>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" asp-area="Admin" asp-controller="Account" asp-action="Index">Account Info</a></li>
+                                            <li><a class="dropdown-item" asp-area="Admin" asp-controller="Settings" asp-action="Index">Settings</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- Logout button: right on small, right on bigger too -->
+                            <div class="d-flex justify-content-end">
+                                <form asp-area="Admin" asp-controller="Home" asp-action="Logout" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-outline-light">Logout</button>
+                                </form>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top text-muted">
+        <div class="container">
+            <p class="text-center m-1 p-2">
+                &copy; 2025 - KidNest -
+                <a asp-area="Admin" asp-controller="Home" asp-action="Index">Home</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/elevatezoom/jquery.elevatezoom.min.js"></script>
+    <script src="~/lib/microsoft-signalr/signalr.min.js"></script>
+    <script src="~/lib/datatables/datatables.min.js"></script>
+    <script src="~/lib/select2/js/select2.min.js"></script>
+    <script src="~/js/script.js" asp-append-version="true"></script>
+    <script src="~/js/admin.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+</body>
+
+</html>

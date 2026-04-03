@@ -1,0 +1,52 @@
+﻿@model KidNest.Web.ViewModels.Orders.OrderCreateViewModel
+
+<div class="modal fade" id="orderConfirmationModal" tabindex="-1"
+     aria-labelledby="orderConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title" id="orderConfirmationModalLabel">Review your order summary</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- Modal Body -->
+            <form id="orderForm" method="post">
+                @Html.AntiForgeryToken()
+                <div class="modal-body">
+                    <div id="error-message" class="alert alert-danger d-none"></div>
+                    <p class="fw-semibold">You will order the following items:</p>
+                    <ul class="list-group" id="orderItemsList">
+                        @foreach (var item in Model.OrderItems!)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center" data-id="@item.ProductId">
+                                <div class="d-flex align-items-center">
+                                    <p class="product-name">@item.ProductName</p>
+                                    x<span class="badge bg-secondary ms-2">@item.Quantity</span>
+                                </div>
+                                <span class="price fw-semibold">@item.Price</span>
+                            </li>
+                        }
+                    </ul>
+                    <div class="mt-3 px-2 d-flex justify-content-between align-items-center">
+                        <strong class="fst-italic">Total items:</strong>
+                        <span id="totalItemsCount" class="fs-5 fw-bold">@Model.OrderItems!.Sum(item => item.Quantity)</span>
+                    </div>
+                    <div class="mt-1 px-2 d-flex justify-content-between align-items-center">
+                        <strong class="fst-italic">Total Price:</strong>
+                        <span id="modalTotal" class="fs-5 fw-bold text-success">$@Model.TotalAmount</span>
+                    </div>
+                    <p class="text-muted fst-italic mt-3 px-2">
+                        The delivery address used upon account registration will be used for shipping. 
+                        You can always edit it in your <a asp-action="Update" asp-controller="Account" class="text-muted">account settings</a>.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                    <button type="submit" class="btn btn-warning rounded-pill" id="confirmOrderBtn">
+                        <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                        Confirm order
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
