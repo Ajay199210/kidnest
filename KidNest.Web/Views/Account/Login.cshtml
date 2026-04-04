@@ -17,7 +17,7 @@
                 <p class="text-muted small mb-3">Please enter your credentials to login.</p>
             </div>
             @await Html.PartialAsync("_ValidationSummary")
-            <form asp-action="Login" novalidate>
+            <form asp-action="Login" novalidate id="loginForm">
                 <div class="mb-3">
                     <label for="InputUsernameEmail" class="form-label small fw-semibold">Email or Phone</label>
                     <div class="input-group">
@@ -49,7 +49,7 @@
                     <a href="#" class="small text-decoration-none" style="color: var(--bs-primary-text-emphasis);"
                        data-bs-toggle="modal" data-bs-target="#resetPasswordModal">Forgot password?</a>
                 </div>
-                <button type="submit" class="btn btn-cart rounded-pill w-100 fw-semibold py-2">
+                <button type="submit" id="loginSubmitBtn" class="btn btn-cart rounded-pill w-100 fw-semibold py-2">
                     <i class="fas fa-sign-in-alt me-1"></i> SIGN IN
                 </button>
             </form>
@@ -146,4 +146,10 @@
 
 @section Scripts {
     <script src="/js/login.js"></script>
+    <script>
+        $('#loginForm').on('submit', function () {
+            $('#loginSubmitBtn').prop('disabled', true)
+                .html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Signing in...');
+        });
+    </script>
 }

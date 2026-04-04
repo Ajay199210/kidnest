@@ -530,28 +530,6 @@ header .bottom-header {
     animation-delay: 2s;
 }
 
-/* ── Page Transitions ── */
-@keyframes page-fade-in {
-    from {
-        opacity: 0;
-        transform: translateY(6px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-main {
-    animation: page-fade-in 0.35s ease;
-}
-
-@media (prefers-reduced-motion: reduce) {
-    main {
-        animation: none;
-    }
-}
 
 /* ── Category Section Headers ── */
 .category-accent-bar {

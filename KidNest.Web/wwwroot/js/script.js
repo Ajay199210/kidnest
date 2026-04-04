@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Smooth scroll to top
     $backtoTopBtn.on('click', function () {
-        window.scrollTo({ top: 0, behavior: 'smooth'});
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     // Highlight active nav link in bottom header
@@ -244,7 +244,7 @@ function updateCartCount() {
 }
 
 // Update cart quantity
-function updateCartQuantity(productId, quantity, colorId = null, sizeId = null) {
+function updateCartQuantity(productId, quantity, colorId = null, sizeId = null, complete = null) {
     $.ajax({
         url: '/cart/updateQuantity', // Your update endpoint
         method: 'POST',
@@ -262,6 +262,9 @@ function updateCartQuantity(productId, quantity, colorId = null, sizeId = null) 
         },
         error: function (xhr, status, error) {
             console.error('Error updating cart');
+        },
+        complete: function () {
+            if (complete) complete();
         }
     });
 }
@@ -644,12 +647,13 @@ $(document).on("click", "#clearCartBtn", function () {
 
 // Handle increment/decrement item count in off canvas
 $(document).on('click', '.increment-btn, .decrement-btn', function () {
-    const isIncrement = $(this).hasClass('increment-btn');
-    const productId = $(this).closest('li').data('id');
-    const colorId = $(this).closest('li').data('color-id');
-    const sizeId = $(this).closest('li').data('size-id');
+    const $btn = $(this);
+    const isIncrement = $btn.hasClass('increment-btn');
+    const productId = $btn.closest('li').data('id');
+    const colorId = $btn.closest('li').data('color-id');
+    const sizeId = $btn.closest('li').data('size-id');
 
-    const inputGroup = $(this).closest('.input-group');
+    const inputGroup = $btn.closest('.input-group');
     const qtyDiv = inputGroup.find('.cart-qty-text');
     const qtySpan = qtyDiv.find('span');
     let quantity = parseInt(qtySpan.text());
@@ -674,18 +678,23 @@ $(document).on('click', '.increment-btn, .decrement-btn', function () {
     // Update quantity visually
     qtySpan.text(quantity);
 
-    // Disable/Enable increment and decrement buttons based on new quantity
+    // Update the displayed "item-quantity" in the price line
+    $btn.closest('li').find('.item-quantity').text(quantity);
+
+    // Loading state: disable both buttons, show spinner on clicked one
     const incrementBtn = inputGroup.find('.increment-btn');
     const decrementBtn = inputGroup.find('.decrement-btn');
+    const originalHtml = $btn.html();
+    incrementBtn.prop('disabled', true);
+    decrementBtn.prop('disabled', true);
+    $btn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
 
-    incrementBtn.prop('disabled', quantity >= maxQty);
-    decrementBtn.prop('disabled', quantity <= 1);
-
-    // Update the displayed "item-quantity" in the price line
-    $(this).closest('li').find('.item-quantity').text(quantity);
-
-    // Send updated quantity to server
-    updateCartQuantity(productId, quantity, colorId, sizeId);
+    // Send updated quantity to server, restore buttons on complete
+    updateCartQuantity(productId, quantity, colorId, sizeId, function () {
+        $btn.html(originalHtml);
+        incrementBtn.prop('disabled', quantity >= maxQty);
+        decrementBtn.prop('disabled', quantity <= 1);
+    });
 
     // Update total price immediately (no need to wait for refresh)
     calculateCartTotalPrice();
@@ -699,13 +708,12 @@ $(document).on('click', '.increment-btn, .decrement-btn', function () {
 
 // Delete an item from the cart
 $(document).on('click', '.delete-item-btn', function () {
-    const productId = $(this).closest('li').data('id');
-    const $listItem = $(this).closest('.list-group-item');
+    const $btn = $(this);
+    const productId = $btn.closest('li').data('id');
+    const $listItem = $btn.closest('.list-group-item');
 
-    // Loading state
-    $(this).html('<i class="fas fa-spinner fa-spin"></i>');
+    $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
 
-    // Send a request to remove the item from the cart
     $.ajax({
         url: '/cart/removeFromCart',
         method: 'POST',
@@ -716,12 +724,11 @@ $(document).on('click', '.delete-item-btn', function () {
                 $listItem.fadeOut(300, function () {
                     $(this).remove();
                 });
-
-                // Refresh offcanvas
-                refreshCartOffcanvas()
+                refreshCartOffcanvas();
             }
         },
         error: function (xhr, status, error) {
+            $btn.prop('disabled', false).html('<i class="fa-solid fa-xmark"></i>');
             console.error('Error removing item from cart:', error);
         }
     });

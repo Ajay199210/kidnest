@@ -402,5 +402,3 @@ FodyWeavers.xsd
 
 # User-uploaded/admin-managed content
 **/wwwroot/uploads/
-**/wwwroot/img/carousel/
-**/wwwroot/img/store/

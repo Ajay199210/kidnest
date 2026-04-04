@@ -5,7 +5,6 @@ using KidNest.Services.Interfaces;
 using KidNest.Services.Services;
 using KidNest.Web.Hubs;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.StaticFiles;
 using NToastNotify;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -141,18 +140,7 @@ app.UseStatusCodePagesWithReExecute("/Error/{0}");
 
 app.UseHttpsRedirection();
 
-// In production (MonsterASP): static files are flattened to content root (no nested wwwroot)
-if (!app.Environment.IsDevelopment())
-{
-    app.Environment.WebRootPath = app.Environment.ContentRootPath;
-    var contentTypeProvider = new FileExtensionContentTypeProvider();
-    contentTypeProvider.Mappings.Remove(".json");
-    app.UseStaticFiles(new StaticFileOptions { ContentTypeProvider = contentTypeProvider });
-}
-else
-{
-    app.UseStaticFiles();
-}
+app.UseStaticFiles();
 app.UseNToastNotify();
 app.UseRouting();
 app.UseSession();

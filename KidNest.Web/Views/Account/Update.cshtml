@@ -16,7 +16,7 @@
                 <h3 class="fw-bold mb-1">@User.Identity!.Name</h3>
                 <p class="text-muted small mb-3">Update your account details below.</p>
             </div>
-            <form asp-action="Update" novalidate>
+            <form asp-action="Update" novalidate id="updateForm">
                 <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
                 <div class="mb-3">
                     <label for="inputFullName" class="form-label small fw-semibold">Full Name</label>
@@ -75,7 +75,7 @@
                     </div>
                     <span asp-validation-for="ConfirmNewPassword" class="text-danger small"></span>
                 </div>
-                <button type="submit" class="btn btn-cart rounded-pill w-100 fw-semibold py-2">
+                <button type="submit" id="saveChangesBtn" class="btn btn-cart rounded-pill w-100 fw-semibold py-2">
                     <i class="fas fa-save me-1"></i> SAVE CHANGES
                 </button>
                 <button type="button" id="btnCloseAccount" class="btn btn-outline-danger rounded-pill w-100 mt-2 fw-semibold py-2"
@@ -116,6 +116,11 @@
 
 @section Scripts {
     <script>
+        $('#updateForm').on('submit', function () {
+            $('#saveChangesBtn').prop('disabled', true)
+                .html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Saving...');
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             // Toggle password
             const togglePassword = document.getElementById("togglePassword");
@@ -145,6 +150,11 @@
                 var errorDiv = $('#deleteError');
                 errorDiv.addClass('d-none').text('');
 
+                var $closeBtn = form.find('button[type="submit"]');
+                var origCloseBtnHtml = $closeBtn.html();
+                $closeBtn.prop('disabled', true)
+                    .html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Processing...');
+
                 $.ajax({
                     url: form.attr('action'),
                     type: 'POST',
@@ -169,6 +179,8 @@
                         }
                     },
                     error: function (xhr) {
+                        $closeBtn.prop('disabled', false).html(origCloseBtnHtml);
+
                         let error = xhr.responseJSON || { message: "An unknown error occurred." };
                         let messages = [];
 

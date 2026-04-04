@@ -59,7 +59,8 @@
     $(document).on('submit', '#passwordResetForm', async function (e) {
         e.preventDefault();
         const $btn = $('#resetPassContinueBtn');
-        $btn.prop('disabled', true);
+        $btn.prop('disabled', true)
+            .prepend('<span class="spinner-border spinner-border-sm me-1 btn-spinner" role="status" aria-hidden="true"></span>');
 
         if (currentStep === 1) {
             try {
@@ -104,6 +105,7 @@
                     error.responseJSON?.message || 'Something went wrong. Please try again.'
                 ).show();
             } finally {
+                $btn.find('.btn-spinner').remove();
                 $btn.prop('disabled', false);
             }
         }
@@ -117,6 +119,7 @@
                     $('#otpCode').addClass('is-invalid');
                     $('#otpStatusMessage').text('Please enter a valid 6-digit code.').show();
                     $('#otpStatusMessage').replaceClass('text-success', 'text-danger');
+                    $btn.find('.btn-spinner').remove();
                     $btn.prop('disabled', false);
 
                     return;
@@ -145,12 +148,12 @@
                     $btn.prop('disabled', true);
                 }
                 else {
-                    console.log(error.responseJSON?.message);
                     $('#otpCode').addClass('is-invalid');
                     $('#otpStatusMessage').text(
                         error.responseJSON?.message || 'OTP verification failed. Please try again.'
                     ).show();
                     $('#otpStatusMessage').replaceClass('text-success', 'text-danger');
+                    $btn.find('.btn-spinner').remove();
                     $btn.prop('disabled', false);
                     $('#resendOtpBtn').prop('disabled', false);
                 }
@@ -169,6 +172,7 @@
                 if (newPassword.length < 8) {
                     $('#newPassword').addClass('is-invalid');
                     $('#resetPasswordStatusMessage').text('Password must be at least 8 characters').show();
+                    $btn.find('.btn-spinner').remove();
                     $btn.prop('disabled', false);
 
                     return;
@@ -178,6 +182,7 @@
                     $('#newPassword').addClass('is-invalid');
                     $('#confirmPassword').addClass('is-invalid');
                     $('#resetPasswordStatusMessage').text('Passwords do not match').show();
+                    $btn.find('.btn-spinner').remove();
                     $btn.prop('disabled', false);
 
                     return;
@@ -225,6 +230,7 @@
                     //    $('#resetPasswordStatusMessage').text(response.message || 'Password reset failed').show();
                     //}
 
+                    $btn.find('.btn-spinner').remove();
                     $btn.prop('disabled', false);
                 }
 
@@ -246,6 +252,7 @@
                     $('#resetPasswordStatusMessage').text('An unexpected error occurred').show();
                 }
 
+                $btn.find('.btn-spinner').remove();
                 $btn.prop('disabled', false);
             }
         }

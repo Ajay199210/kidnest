@@ -1,5 +1,4 @@
-﻿using KidNest.Core.Enums;
-using KidNest.Core.Shared;
+﻿using KidNest.Core.Shared;
 using KidNest.Services.DTOs.Contents;
 using KidNest.Services.Extensions;
 using KidNest.Services.Interfaces;
@@ -21,8 +20,8 @@ namespace KidNest.Web.Areas.Admin.Controllers
         private readonly IHubContext<StoreHub> _hubContext;
         private readonly IFileStorageService _fileStorageService;
 
-        public ContentsController(IContentsService contentsService, 
-            IHubContext<StoreHub> hubContext, 
+        public ContentsController(IContentsService contentsService,
+            IHubContext<StoreHub> hubContext,
             IFileStorageService fileStorageService)
         {
             _contentsService = contentsService;
@@ -96,7 +95,7 @@ namespace KidNest.Web.Areas.Admin.Controllers
             if (contentCreateVM.File != null)
             {
                 //string filePath = await _contentsService.SaveContentFileAsync(contentCreateVM.File);
-                string? filePath = await _fileStorageService.SaveFileAsync(contentCreateVM.File, "uploads/carousel");
+                string? filePath = await _fileStorageService.SaveFileAsync(contentCreateVM.File, "uploads/img/carousel");
                 contentCreateDTO.Path = filePath;
             }
 
@@ -156,7 +155,7 @@ namespace KidNest.Web.Areas.Admin.Controllers
                 ContentDTO contentDTO = new()
                 {
                     Id = contentEditVM.Id,
-                    Name = contentEditVM.Name,  
+                    Name = contentEditVM.Name,
                     Type = contentEditVM.Type,
                     Path = contentEditVM.Path,
                     IsActive = contentEditVM.IsActive,
@@ -166,7 +165,7 @@ namespace KidNest.Web.Areas.Admin.Controllers
                 if (contentEditVM.File != null)
                 {
                     //string imagePath = await _contentsService.SaveContentFileAsync(contentEditVM.File);
-                    string imagePath = await _fileStorageService.SaveFileAsync(contentEditVM.File, "uploads/carousel");
+                    string imagePath = await _fileStorageService.SaveFileAsync(contentEditVM.File, "uploads/img/carousel");
                     contentDTO.Path = imagePath;
                 }
 

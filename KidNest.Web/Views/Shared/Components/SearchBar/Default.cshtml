@@ -29,9 +29,22 @@
                    placeholder="What are you looking for?" />
 
             <!-- Search Button -->
-            <button type="submit" class="btn search-submit-btn border-0" aria-label="Search">
+            <button type="submit" class="btn search-submit-btn border-0" id="searchSubmitBtn" aria-label="Search">
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
         </div>
     </div>
 </form>
+<script>
+    (function () {
+        var searchBar = document.querySelector('.search-bar');
+        if (!searchBar) return;
+        searchBar.closest('form').addEventListener('submit', function () {
+            var btn = document.getElementById('searchSubmitBtn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+            }
+        });
+    })();
+</script>
