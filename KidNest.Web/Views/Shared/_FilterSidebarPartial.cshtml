@@ -1,0 +1,66 @@
+<!-- Filter Sidebar (Placeholder) -->
+<div class="filter-sidebar p-3 p-lg-4">
+    <h6 class="fw-bold mb-3 pb-2 border-bottom">
+        <i class="fas fa-sliders me-2"></i>Filters
+    </h6>
+
+    <!-- Categories -->
+    <div class="mb-4">
+        <label class="form-label fw-semibold small text-dark mb-2">Category</label>
+        <select class="form-select form-select-sm rounded-pill" disabled>
+            <option selected>All Categories</option>
+        </select>
+    </div>
+
+    <!-- Price Range -->
+    <div class="mb-4">
+        <label class="form-label fw-semibold small text-dark mb-2">Price Range</label>
+        <div class="d-flex gap-2 align-items-center">
+            <input type="number" class="form-control form-control-sm rounded-pill" placeholder="Min" disabled />
+            <span class="text-muted small">-</span>
+            <input type="number" class="form-control form-control-sm rounded-pill" placeholder="Max" disabled />
+        </div>
+    </div>
+
+    <!-- Colors -->
+    <div class="mb-4">
+        <label class="form-label fw-semibold small text-dark mb-2">Color</label>
+        <div class="d-flex flex-wrap gap-2">
+            <span class="rounded-circle border border-2 d-inline-block filter-color-swatch" style="background-color: #FF0000;" title="Red"></span>
+            <span class="rounded-circle border border-2 d-inline-block filter-color-swatch" style="background-color: #0000FF;" title="Blue"></span>
+            <span class="rounded-circle border border-2 d-inline-block filter-color-swatch" style="background-color: #00AA00;" title="Green"></span>
+            <span class="rounded-circle border border-2 d-inline-block filter-color-swatch" style="background-color: #FFD700;" title="Yellow"></span>
+            <span class="rounded-circle border border-2 d-inline-block filter-color-swatch" style="background-color: #FF69B4;" title="Pink"></span>
+            <span class="rounded-circle border border-2 d-inline-block filter-color-swatch" style="background-color: #000000;" title="Black"></span>
+        </div>
+    </div>
+
+    <!-- Sizes -->
+    <div class="mb-4">
+        <label class="form-label fw-semibold small text-dark mb-2">Size</label>
+        <div class="d-flex flex-wrap gap-1">
+            <span class="badge rounded-pill border text-dark bg-white px-3 py-1 filter-size-badge">XS</span>
+            <span class="badge rounded-pill border text-dark bg-white px-3 py-1 filter-size-badge">S</span>
+            <span class="badge rounded-pill border text-dark bg-white px-3 py-1 filter-size-badge">M</span>
+            <span class="badge rounded-pill border text-dark bg-white px-3 py-1 filter-size-badge">L</span>
+            <span class="badge rounded-pill border text-dark bg-white px-3 py-1 filter-size-badge">XL</span>
+        </div>
+    </div>
+
+    <!-- Sort By -->
+    <div class="mb-4">
+        <label class="form-label fw-semibold small text-dark mb-2">Sort By</label>
+        <select class="form-select form-select-sm rounded-pill" disabled>
+            <option selected>Relevance</option>
+            <option>Price: Low to High</option>
+            <option>Price: High to Low</option>
+            <option>Newest First</option>
+        </select>
+    </div>
+
+    <!-- Apply Button -->
+    <button class="btn btn-cart w-100 rounded-pill fw-semibold py-2" disabled>
+        <i class="fas fa-check me-1"></i> Apply Filters
+    </button>
+    <p class="text-muted text-center small mt-2 mb-0 fst-italic">Coming soon</p>
+</div>

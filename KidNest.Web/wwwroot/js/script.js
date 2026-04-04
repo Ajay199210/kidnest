@@ -1,4 +1,14 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
+﻿// Measure actual header height and expose as CSS variable
+(function () {
+    function setHeaderHeight() {
+        const h = document.querySelector('header');
+        if (h) document.documentElement.style.setProperty('--header-h', h.offsetHeight + 'px');
+    }
+    setHeaderHeight();
+    window.addEventListener('resize', setHeaderHeight);
+})();
+
+document.addEventListener('DOMContentLoaded', function () {
 
     // Set up SignalR connection
     const connection = new signalR.HubConnectionBuilder()
@@ -36,6 +46,12 @@
     // Refresh off canvas
     refreshCartOffcanvas();
 
+    // Show floating filter button only on pages with filter sidebar
+    const $filterFloatBtn = $('#filterFloatBtn');
+    if ($('.filter-sidebar-col').length) {
+        $filterFloatBtn.removeClass('d-none');
+    }
+
     // Show/hide back to top button
     const $backtoTopBtn = $('#backToTopBtn');
     $(window).on('scroll', function () {
@@ -56,6 +72,27 @@
     $backtoTopBtn.on('click', function () {
         window.scrollTo({ top: 0, behavior: 'smooth'});
     });
+
+    // Highlight active nav link in bottom header
+    const currentPath = window.location.pathname.toLowerCase();
+    document.querySelectorAll('.header-nav .nav-link').forEach(function (link) {
+        const href = link.getAttribute('href');
+        if (href && href.toLowerCase() === currentPath) {
+            link.classList.add('active');
+        }
+    });
+
+    // Mobile burger menu toggle
+    var toggleBtn = document.getElementById('headerNavToggle');
+    var navMenu = document.getElementById('headerNavMenu');
+    if (toggleBtn && navMenu) {
+        toggleBtn.addEventListener('click', function () {
+            navMenu.classList.toggle('show');
+            var icon = toggleBtn.querySelector('i');
+            icon.classList.toggle('fa-bars');
+            icon.classList.toggle('fa-xmark');
+        });
+    }
 });
 
 //// Functions
@@ -644,9 +681,8 @@ $(document).on('click', '.increment-btn, .decrement-btn', function () {
     incrementBtn.prop('disabled', quantity >= maxQty);
     decrementBtn.prop('disabled', quantity <= 1);
 
-    // Update the displayed "item-quantity" in the top product info line
-    const itemPriceSection = inputGroup.prev('.d-flex').find('.item-quantity');
-    itemPriceSection.text(quantity);
+    // Update the displayed "item-quantity" in the price line
+    $(this).closest('li').find('.item-quantity').text(quantity);
 
     // Send updated quantity to server
     updateCartQuantity(productId, quantity, colorId, sizeId);
@@ -665,21 +701,19 @@ $(document).on('click', '.increment-btn, .decrement-btn', function () {
 $(document).on('click', '.delete-item-btn', function () {
     const productId = $(this).closest('li').data('id');
     const $listItem = $(this).closest('.list-group-item');
-    const $inputGroup = $listItem.next('.input-group');
 
     // Loading state
     $(this).html('<i class="fas fa-spinner fa-spin"></i>');
 
     // Send a request to remove the item from the cart
     $.ajax({
-        url: '/cart/removeFromCart', // The action to remove the cart item
+        url: '/cart/removeFromCart',
         method: 'POST',
-        data: JSON.stringify(productId), // Send productId to the server
+        data: JSON.stringify(productId),
         contentType: 'application/json',
         success: function (response) {
             if (response.success) {
-                // Remove the item from the DOM
-                $listItem.add($inputGroup).fadeOut(300, function () {
+                $listItem.fadeOut(300, function () {
                     $(this).remove();
                 });
 
@@ -805,14 +839,14 @@ $(document).on('submit', '#orderForm', function (e) {
 // Update selected category id for the search bar component
 $(document).on('click', '.category-option', function (e) {
     const $categoryIdInput = $("#categoryIdInput");
-    const $categoryBtn = $(".category-btn-filter");
+    const $categoryLabel = $(".search-category-btn .category-label");
     e.preventDefault();
 
     const id = $(this).data("id") ?? "";
     const name = $(this).text().trim();
 
     $categoryIdInput.val(id);
-    $categoryBtn.text(name || "All");
+    $categoryLabel.text(name || "All");
 });
 
 // Handle buy now button click

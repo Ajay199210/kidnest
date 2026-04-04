@@ -1,35 +1,38 @@
-﻿<div class="container-fluid px-4 px-md-3">
-    <!-- Top Footer Part -->
-    <div class="d-flex flex-column flex-md-row align-items-center justify-content-md-end text-center text-md-end py-2">
-        <p class="fw-semibold text-dark mb-2 mb-md-0 me-md-3">
-            Get connected with us on social networks:
-        </p>
+﻿<div class="container-fluid px-3 px-md-5">
+    <!-- Main Footer -->
+    <div class="row py-4 g-4">
+        <!-- Logo & Tagline -->
+        <div class="col-12 col-md-4 text-center text-md-start">
+            <a href="/" class="d-inline-block mb-2">
+                <img src="~/img/logo/logo.png" alt="KidNest" class="footer-logo">
+            </a>
+            <p class="text-dark mb-0">Toys & joy for little ones.</p>
+        </div>
 
-        <!-- Social Links from component -->
-        <div class="d-flex justify-content-center">
-            @await Component.InvokeAsync("PublicSettings", new { section = "SocialIcons" })
+        <!-- Quick Links -->
+        <div class="col-6 col-md-4 text-center">
+            <h5 class="fw-bold text-dark mb-3">Quick Links</h5>
+            <ul class="nav flex-column gap-1 align-items-center">
+                <li class="nav-item"><a asp-action="Index" asp-controller="Home" class="nav-link footer-link p-0">Home</a></li>
+                <li class="nav-item"><a asp-action="NewReleases" asp-controller="Products" class="nav-link footer-link p-0">New Releases</a></li>
+                <li class="nav-item"><a asp-action="HotDeals" asp-controller="Products" class="nav-link footer-link p-0">Hot Deals</a></li>
+            </ul>
+        </div>
+
+        <!-- Contact & Social -->
+        <div class="col-6 col-md-4 text-center text-md-center">
+            <h5 class="fw-bold text-dark mb-3">Contact</h5>
+            <div class="footer-contact mb-3">
+                @await Component.InvokeAsync("PublicSettings", new { section = "ContactInfo" })
+            </div>
+            <div class="d-flex justify-content-center justify-content-md-center">
+                @await Component.InvokeAsync("PublicSettings", new { section = "SocialIcons" })
+            </div>
         </div>
     </div>
 
-
-    <!-- Middle Footer Part -->
-    <div class="border-2 mb-3 text-center">
-        <!-- Logo -->
-        <a href="/" class="d-inline-block">
-            <img src="~/img/logo/logo.png" alt="KidNest" class="footer-logo">
-        </a>
-
-        <!-- Navigation -->
-        <ul class="nav justify-content-center gap-3 flex-wrap">
-            <li class="nav-item"><a asp-action="Index" asp-controller="Home" class="nav-link p-0">Home</a></li>
-            <li class="nav-item"><a asp-action="NewReleases" asp-controller="Products" class="nav-link p-0">New Releases</a></li>
-            <li class="nav-item"><a asp-action="HotDeals" asp-controller="Products" class="nav-link p-0">Hot Deals</a></li>
-            <!--<li class="nav-item"><a href="#" class="nav-link p-0">FAQs</a></li>-->
-        </ul>
-    </div>
-
-    <!-- Bottom Footer Part -->
-    <div class="text-center py-3 border-top text-muted small">
-        © 2025 KidNest, Inc. All rights reserved.
+    <!-- Bottom Bar -->
+    <div class="text-center py-3 border-top">
+        <small class="text-dark">&copy; @DateTime.Now.Year KidNest, Inc. All rights reserved.</small>
     </div>
 </div>

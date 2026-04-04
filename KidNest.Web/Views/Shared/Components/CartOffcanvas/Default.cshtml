@@ -2,12 +2,14 @@
 
 <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel"
     data-bs-scroll="true">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title">Shopping Cart</h5>
+    <div class="offcanvas-header border-bottom bg-light">
+        <h5 class="offcanvas-title fw-bold">
+            <i class="fas fa-shopping-cart me-2" style="color: var(--bs-primary-text-emphasis);"></i>Shopping Cart
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body">
-        <div id="cartItemsContainer">
+    <div class="offcanvas-body p-0 d-flex flex-column">
+        <div id="cartItemsContainer" class="flex-grow-1 overflow-auto">
             @await Html.PartialAsync("_CartItemsPartial", Model)
         </div>
     </div>

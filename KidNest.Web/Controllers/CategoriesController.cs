@@ -40,7 +40,7 @@ namespace KidNest.Web.Controllers
                     Discount = productDTO.Discount,
                     Description = productDTO.Description,
                     Quantity = productDTO.Quantity,
-                    ImagePath = productDTO.ImagePath ?? "/img/no-img.jpg",
+                    ImagePath = productDTO.ImagePath,
                     Variants = productDTO.VariantDTOs.Select(v => new ProductVariantViewModel
                     {
                         Id = v.Id,

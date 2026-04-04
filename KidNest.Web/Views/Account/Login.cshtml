@@ -4,53 +4,58 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+<div class="auth-page min-vh-100 d-flex justify-content-center align-items-center">
     <div class="row w-100 justify-content-center">
-        <div class="col-md-6 col-lg-4 m-4 p-5 pb-4 form-container rounded-5 rounded-sm-0">
-            <div class="logo-container text-center mb-3">
+        <div class="col-md-6 col-lg-4 m-4 p-4 p-md-5 pb-4 auth-form-card rounded-4">
+            <div class="text-center mb-3">
                 <a asp-action="Index" asp-controller="Home">
-                    <img src="~/img/logo/logo.png" class="form-logo p-2 img-fluid" alt="Logo">
+                    <img src="~/img/logo/logo.png" class="auth-form-logo img-fluid" alt="Logo">
                 </a>
             </div>
             <div class="mt-0">
-                <h3 class="mb-2">Login to your account</h3>
-                <hr />
-                <p>Welcome back! Please enter your username and password to login. </p>
+                <h3 class="fw-bold mb-1">Welcome back</h3>
+                <p class="text-muted small mb-3">Please enter your credentials to login.</p>
             </div>
             @await Html.PartialAsync("_ValidationSummary")
-            <form asp-action="Login">
+            <form asp-action="Login" novalidate>
                 <div class="mb-3">
-                    <input class="form-control rounded-3 border border-secondary" id="InputUsernameEmail"
-                           aria-describedby="usernameOrEmailHelp" placeholder="Phone number or email"
-                           asp-for="EmailOrPhone" autofocus>
-                    <div id="usernameOrEmailHelp" class="form-text fst-italic">
-                        We'll never
-                        share your email with anyone else.
+                    <label for="InputUsernameEmail" class="form-label small fw-semibold">Email or Phone</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-user text-muted"></i></span>
+                        <input class="form-control border-start-0" id="InputUsernameEmail"
+                               placeholder="Phone number or email"
+                               asp-for="EmailOrPhone" autofocus>
                     </div>
-                    <span asp-validation-for="EmailOrPhone" class="text-danger fw-bold"></span>
+                    <span asp-validation-for="EmailOrPhone" class="text-danger small"></span>
                 </div>
-                <div class="mb-3 position-relative">
-                    <input type="password" class="form-control rounded-3 border border-secondary pe-5"
-                           id="inputPassword" placeholder="Password" asp-for="Password" />
-                    <span toggle="#inputPassword" id="togglePassword" class="position-absolute end-0 eye-field-icon me-3" style="top: 7px;">
-                        <i class="fa-solid fa-eye"></i>
-                    </span>
-                    <span asp-validation-for="Password" class="text-danger fw-bold"></span>
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label small fw-semibold">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-lock text-muted"></i></span>
+                        <input type="password" class="form-control border-start-0 border-end-0"
+                               id="inputPassword" placeholder="Password" asp-for="Password" />
+                        <span class="input-group-text bg-white border-start-0 auth-eye-toggle" id="togglePassword">
+                            <i class="fa-solid fa-eye text-muted"></i>
+                        </span>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>
-                <!-- Remember Me checkbox -->
-                <div class="d-flex justify-content-between">
+                <!-- Remember Me -->
+                <div class="d-flex justify-content-between align-items-center mb-3">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="RememberMe" asp-for="RememberMe">
-                        <label class="form-check-label" for="RememberMe">Remember me</label>
+                        <label class="form-check-label small" for="RememberMe">Remember me</label>
                     </div>
-                    <a href="#" class="text-dark" data-bs-toggle="modal"
-                       data-bs-target="#resetPasswordModal">Forgot password?</a>
+                    <a href="#" class="small text-decoration-none" style="color: var(--bs-primary-text-emphasis);"
+                       data-bs-toggle="modal" data-bs-target="#resetPasswordModal">Forgot password?</a>
                 </div>
-                <button type="submit" class="btn btn-dark rounded-pill w-100 mt-3">SIGN IN</button>
+                <button type="submit" class="btn btn-cart rounded-pill w-100 fw-semibold py-2">
+                    <i class="fas fa-sign-in-alt me-1"></i> SIGN IN
+                </button>
             </form>
             <div class="text-center mt-3 small">
                 Don't have an account?
-                <a asp-action="Register" asp-controller="Account" class="text-dark">Create one</a>
+                <a asp-action="Register" asp-controller="Account" class="fw-semibold text-decoration-none" style="color: var(--bs-primary-text-emphasis);">Create one</a>
             </div>
         </div>
     </div>
@@ -58,19 +63,26 @@
     <!-- Forgot Password Modal -->
     <div class="modal fade" id="resetPasswordModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header text-bg-warning">
-                    <h5 class="modal-title">Password Reset</h5>
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header border-0 pb-1">
+                    <div>
+                        <h5 class="modal-title fw-bold mb-0">
+                            <i class="fa-solid fa-lock-open me-2 text-primary"></i>Reset Password
+                        </h5>
+                        <p class="text-muted small mb-0">Follow the steps to recover your account.</p>
+                    </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id="passwordResetForm">
-                    <div class="modal-body">
+                    <div class="modal-body pt-2">
                         @Html.AntiForgeryToken()
                         <div id="stepsContainer"></div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-warning" id="resetPassContinueBtn">Continue</button>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-cart rounded-pill px-4 fw-semibold" id="resetPassContinueBtn">
+                            <i class="fa-solid fa-arrow-right me-1"></i> Continue
+                        </button>
                     </div>
                 </form>
             </div>
@@ -81,83 +93,56 @@
 <!-- Step 1 Template: Phone/Email Entry -->
 <template id="step1Template">
     <div id="phoneEntrySection">
-        <label for="resetPhoneNumber" class="form-label">Phone Number</label>
-        <input type="text" class="form-control" id="resetPhoneNumber"
-                placeholder="Enter your registered phone number">
-        <small class="text-muted fst-italic">An OTP code will be sent to your phone number upon verification</small>
-        <div class="text-danger fst-italic" id="phoneNumberError"></div>
+        <label for="resetPhoneNumber" class="form-label small fw-semibold">Phone Number</label>
+        <div class="input-group">
+            <span class="input-group-text bg-white border-end-0"><i class="fas fa-phone text-muted"></i></span>
+            <input type="text" class="form-control border-start-0" id="resetPhoneNumber"
+                   placeholder="Enter your registered phone number">
+        </div>
+        <small class="text-muted fst-italic mt-1 d-block">An OTP code will be sent to your phone number upon verification.</small>
+        <div class="text-danger small mt-1" id="phoneNumberError"></div>
     </div>
 </template>
 
 <!-- Step 2 Template: OTP Verification -->
 <template id="step2Template">
     <div id="otpSection">
-        <p class="text-muted">We sent a code to <span id="maskedPhone"></span></p>
+        <p class="text-muted small mb-2">We sent a code to <strong><span id="maskedPhone"></span></strong></p>
+        <label class="form-label small fw-semibold">OTP Code</label>
         <div class="input-group">
-            <input type="text" class="form-control" id="otpCode" placeholder="Enter 6-digit OTP" maxlength="6">
+            <span class="input-group-text bg-white border-end-0"><i class="fas fa-key text-muted"></i></span>
+            <input type="text" class="form-control border-start-0 border-end-0" id="otpCode"
+                   placeholder="Enter 6-digit OTP" maxlength="6">
             <button class="btn btn-outline-secondary" type="button" id="resendOtpBtn">
                 <span id="resendText">Resend</span>
                 <span id="countdown" class="d-none">(60s)</span>
             </button>
         </div>
-        <div class="fst-italic" id="otpStatusMessage"></div>
+        <div class="small fst-italic mt-1" id="otpStatusMessage"></div>
     </div>
 </template>
 
 <!-- Step 3 Template: New Password -->
 <template id="step3Template">
     <div id="newPasswordSection">
-        <div class="text-danger fst-italic mb-3" id="resetPasswordStatusMessage"></div>
+        <div class="text-danger small fst-italic mb-3" id="resetPasswordStatusMessage"></div>
         <div class="mb-3">
-            <label for="newPassword" class="form-label">New Password</label>
-            <input type="password" class="form-control" id="newPassword" placeholder="New password">
+            <label for="newPassword" class="form-label small fw-semibold">New Password</label>
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="fas fa-lock text-muted"></i></span>
+                <input type="password" class="form-control border-start-0" id="newPassword" placeholder="New password">
+            </div>
         </div>
         <div class="mb-3">
-            <label for="confirmPassword" class="form-label">Confirm Password</label>
-            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm new password">
+            <label for="confirmPassword" class="form-label small fw-semibold">Confirm Password</label>
+            <div class="input-group">
+                <span class="input-group-text bg-white border-end-0"><i class="fas fa-lock text-muted"></i></span>
+                <input type="password" class="form-control border-start-0" id="confirmPassword" placeholder="Confirm new password">
+            </div>
         </div>
     </div>
 </template>
 
-<style>
-    .container {
-        background-image: url("../img/store/store.png");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-attachment: fixed;
-        max-width: 100%;
-        position: relative;
-    }
-
-        .container:after {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            content: '';
-            background: #000;
-            opacity: .5;
-            z-index: -1;
-        }
-
-    .form-logo {
-        height: auto;
-        width: 250px;
-    }
-
-    .form-container {
-        background-color: rgba(var(--bs-primary-rgb), 0.9);
-        color: black;
-        width: 100%;
-        max-width: 450px; /* Optional: Keeps the login form neat on wide screens */
-    }
-
-    .eye-field-icon {
-        cursor: pointer;
-    }
-</style>
 
 @section Scripts {
     <script src="/js/login.js"></script>

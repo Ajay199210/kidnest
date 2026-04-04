@@ -335,8 +335,8 @@
         $('#resendOtpBtn').removeClass('disabled');
         $('#resendText').removeClass('d-none');
         $('#countdown').addClass('d-none');
-        $('.text-danger').hide();
-        $('.text-success').hide();
+        $('#resetPasswordModal .text-danger').hide();
+        $('#resetPasswordModal .text-success').hide();
         $('#resetPassContinueBtn').prop('disabled', false);
     }
 

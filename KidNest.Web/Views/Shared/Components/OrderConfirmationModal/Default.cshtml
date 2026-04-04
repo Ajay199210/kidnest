@@ -1,49 +1,65 @@
-﻿@model KidNest.Web.ViewModels.Orders.OrderCreateViewModel
+@model KidNest.Web.ViewModels.Orders.OrderCreateViewModel
 
 <div class="modal fade" id="orderConfirmationModal" tabindex="-1"
      aria-labelledby="orderConfirmationModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-warning">
-                <h5 class="modal-title" id="orderConfirmationModalLabel">Review your order summary</h5>
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 rounded-4 overflow-hidden">
+            <!-- Header -->
+            <div class="modal-header border-bottom-0 pb-0 pt-4 px-4">
+                <div>
+                    <h5 class="modal-title fw-bold" id="orderConfirmationModalLabel">
+                        <i class="fas fa-clipboard-check me-2" style="color: var(--bs-primary-text-emphasis);"></i>Order Summary
+                    </h5>
+                    <p class="text-muted small mb-0 mt-1">Review your items before confirming.</p>
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <!-- Modal Body -->
+            <!-- Body -->
             <form id="orderForm" method="post">
                 @Html.AntiForgeryToken()
-                <div class="modal-body">
-                    <div id="error-message" class="alert alert-danger d-none"></div>
-                    <p class="fw-semibold">You will order the following items:</p>
-                    <ul class="list-group" id="orderItemsList">
+                <div class="modal-body px-4">
+                    <div id="error-message" class="alert alert-danger border-0 rounded-3 small d-none"></div>
+
+                    <!-- Items List -->
+                    <ul class="list-group list-group-flush" id="orderItemsList">
                         @foreach (var item in Model.OrderItems!)
                         {
-                            <li class="list-group-item d-flex justify-content-between align-items-center" data-id="@item.ProductId">
-                                <div class="d-flex align-items-center">
-                                    <p class="product-name">@item.ProductName</p>
-                                    x<span class="badge bg-secondary ms-2">@item.Quantity</span>
+                            <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2" data-id="@item.ProductId">
+                                <div class="d-flex align-items-center gap-2">
+                                    <span class="product-name small">@item.ProductName</span>
+                                    <span class="badge bg-secondary rounded-pill">x@item.Quantity</span>
                                 </div>
-                                <span class="price fw-semibold">@item.Price</span>
+                                <span class="price fw-semibold small">@item.Price</span>
                             </li>
                         }
                     </ul>
-                    <div class="mt-3 px-2 d-flex justify-content-between align-items-center">
-                        <strong class="fst-italic">Total items:</strong>
-                        <span id="totalItemsCount" class="fs-5 fw-bold">@Model.OrderItems!.Sum(item => item.Quantity)</span>
+
+                    <!-- Totals -->
+                    <div class="rounded-3 bg-light p-3 mt-3">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <span class="text-muted small">Items</span>
+                            <span id="totalItemsCount" class="fw-semibold">@Model.OrderItems!.Sum(item => item.Quantity)</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                            <span class="fw-bold">Total</span>
+                            <span id="modalTotal" class="fw-bold fs-5" style="color: var(--bs-primary-text-emphasis);">$@Model.TotalAmount</span>
+                        </div>
                     </div>
-                    <div class="mt-1 px-2 d-flex justify-content-between align-items-center">
-                        <strong class="fst-italic">Total Price:</strong>
-                        <span id="modalTotal" class="fs-5 fw-bold text-success">$@Model.TotalAmount</span>
+
+                    <!-- Delivery Note -->
+                    <div class="d-flex align-items-start gap-2 mt-3 small text-muted">
+                        <i class="fas fa-truck mt-1" style="font-size: 0.75rem;"></i>
+                        <span>
+                            Delivery to your registered address.
+                            Update it in <a asp-action="Update" asp-controller="Account" class="fw-semibold text-decoration-underline" style="color: var(--bs-primary-text-emphasis);">account settings</a>.
+                        </span>
                     </div>
-                    <p class="text-muted fst-italic mt-3 px-2">
-                        The delivery address used upon account registration will be used for shipping. 
-                        You can always edit it in your <a asp-action="Update" asp-controller="Account" class="text-muted">account settings</a>.
-                    </p>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-                    <button type="submit" class="btn btn-warning rounded-pill" id="confirmOrderBtn">
-                        <span id="loadingSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                        Confirm order
+                <!-- Footer -->
+                <div class="modal-footer border-top-0 px-4 pb-4 pt-2">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-3" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-cart rounded-pill px-4 fw-semibold" id="confirmOrderBtn">
+                        <i class="fas fa-check me-1"></i> Confirm Order
                     </button>
                 </div>
             </form>

@@ -4,101 +4,79 @@
     ViewData["Title"] = "Create a new account";
 }
 
-<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+<div class="auth-page min-vh-100 d-flex justify-content-center align-items-center">
     <div class="row w-100 justify-content-center">
-        <div class="col-md-6 col-lg-4 m-4 p-5 pb-4 form-container rounded-5 rounded-sm-0">
-            <div class="logo-container text-center mb-3">
+        <div class="col-md-6 col-lg-4 m-4 p-4 p-md-5 pb-4 auth-form-card rounded-4">
+            <div class="text-center mb-3">
                 <a asp-action="Index" asp-controller="Home">
-                    <img src="~/img/logo/logo.png" class="form-logo p-2 img-fluid" alt="Logo">
+                    <img src="~/img/logo/logo.png" class="auth-form-logo img-fluid" alt="Logo">
                 </a>
             </div>
             <div class="mt-0">
-                <h3 class="mb-2">Register</h3>
-                <hr />
-                <p class="">Welcome! Create a new account. </p>
+                <h3 class="fw-bold mb-1">Create an account</h3>
+                <p class="text-muted small mb-3">Join KidNest and start shopping for your little ones.</p>
             </div>
             @await Html.PartialAsync("_ValidationSummary")
-            <form asp-action="Register">
-                @* <div asp-validation-summary="ModelOnly" class="text-danger fw-bold"></div> *@
+            <form asp-action="Register" novalidate>
                 <div class="mb-3">
-                    <!-- <label for="inputFullname" class="form-label">Email address</label> -->
-                    <input type="text" class="form-control rounded-3 border border-secondary" id="inputFullName"
-                           aria-describedby="fullname" placeholder="Full Name" asp-for="FullName" autofocus required>
-                    <span asp-validation-for="FullName" class="text-danger fw-semibold"></span>
-                </div>
-                <div class="mb-3">
-                    <!-- <label for="inputUsernameEmail" class="form-label">Email address</label> -->
-                    <input class="form-control rounded-3 border border-secondary" id="inputUsernameEmail"
-                           aria-describedby="usernameOrEmailHelp" placeholder="Phone number or email" asp-for="EmailOrPhone" required>
-                    <div id="usernameOrEmailHelp" class="form-text fst-italic">We'll never share your info with anyone else.</div>
-                    <span asp-validation-for="EmailOrPhone" class="text-danger fw-semibold"></span>
+                    <label for="inputFullName" class="form-label small fw-semibold">Full Name</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-user text-muted"></i></span>
+                        <input type="text" class="form-control border-start-0" id="inputFullName"
+                               placeholder="Full Name" asp-for="FullName" autofocus>
+                    </div>
+                    <span asp-validation-for="FullName" class="text-danger small"></span>
                 </div>
                 <div class="mb-3">
-                    <!-- <label for="inputUserAddress" class="form-label">Email address</label> -->
-                    <input class="form-control rounded-3 border border-secondary" id="inputUserAddress"
-                           aria-describedby="address" placeholder="Address" asp-for="Address" required>
-                    <div class="form-text fst-italic">Your delivery address</div>
-                    <span asp-validation-for="Address" class="text-danger fw-semibold"></span>
+                    <label for="inputUsernameEmail" class="form-label small fw-semibold">Email or Phone</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-envelope text-muted"></i></span>
+                        <input class="form-control border-start-0" id="inputUsernameEmail"
+                               placeholder="Phone number or email" asp-for="EmailOrPhone">
+                    </div>
+                    <span asp-validation-for="EmailOrPhone" class="text-danger small"></span>
                 </div>
-                <div class="mb-3 position-relative">
-                    <input type="password" class="form-control rounded-3 border border-secondary pe-5" 
-                        id="inputPassword" placeholder="Password" asp-for="Password" required />
-                    <span toggle="#inputPassword" id="togglePassword" class="position-absolute end-0 eye-field-icon me-3" style="top: 7px;">
-                        <i class="fa-solid fa-eye"></i>
-                    </span>
-                    <span asp-validation-for="Password" class="text-danger fw-semibold"></span>
+                <div class="mb-3">
+                    <label for="inputUserAddress" class="form-label small fw-semibold">Address</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-map-marker-alt text-muted"></i></span>
+                        <input class="form-control border-start-0" id="inputUserAddress"
+                               placeholder="Your delivery address" asp-for="Address">
+                    </div>
+                    <span asp-validation-for="Address" class="text-danger small"></span>
                 </div>
-                <div class="mb-3 position-relative">
-                    <input type="password" class="form-control rounded-3 border border-secondary pe-5" id="inputConfirmPassword"
-                           placeholder="Confirm password" asp-for="ConfirmPassword" required />
-                    <span asp-validation-for="ConfirmPassword" class="text-danger fw-semibold"></span>
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label small fw-semibold">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-lock text-muted"></i></span>
+                        <input type="password" class="form-control border-start-0 border-end-0"
+                               id="inputPassword" placeholder="Password" asp-for="Password" />
+                        <span class="input-group-text bg-white border-start-0 auth-eye-toggle" id="togglePassword">
+                            <i class="fa-solid fa-eye text-muted"></i>
+                        </span>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>
-                <button type="submit" class="btn btn-dark rounded-pill w-100 mt-3">SUBMIT</button>
+                <div class="mb-3">
+                    <label for="inputConfirmPassword" class="form-label small fw-semibold">Confirm Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-lock text-muted"></i></span>
+                        <input type="password" class="form-control border-start-0"
+                               id="inputConfirmPassword" placeholder="Confirm password" asp-for="ConfirmPassword" />
+                    </div>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                </div>
+                <button type="submit" class="btn btn-cart rounded-pill w-100 fw-semibold py-2">
+                    <i class="fas fa-user-plus me-1"></i> CREATE ACCOUNT
+                </button>
             </form>
             <div class="text-center mt-3 small">
-                Have an account?
-                <a asp-action="Login" asp-controller="Account" class="text-dark">Login here</a>
+                Already have an account?
+                <a asp-action="Login" asp-controller="Account" class="fw-semibold text-decoration-none" style="color: var(--bs-primary-text-emphasis);">Login here</a>
             </div>
         </div>
     </div>
 </div>
-
-<style>
-    .container {
-        background-image: url("../img/store/store.png");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-attachment: fixed;
-        max-width: 100%;
-        position: relative;
-    }
-
-        .container:after {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            content: '';
-            background: #000;
-            opacity: .5;
-            z-index: -1;
-        }
-
-    .form-logo {
-        height: auto;
-        width: 250px;
-    }
-
-    .form-container {
-        background-color: rgba(var(--bs-primary-rgb), 0.9);
-        color: black;
-        width: 100%;
-        max-width: 450px;
-    }
-
-</style>
 
 @section Scripts {
     <script>

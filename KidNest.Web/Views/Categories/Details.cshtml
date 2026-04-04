@@ -1,29 +1,38 @@
 ﻿@model KidNest.Web.ViewModels.Categories.CategoryProductsViewModel
 @{
-    ViewData["Title"] = "Category Products";
+    ViewData["Title"] = Model.CategoryName;
 }
 
-<div class="container gallery p-5">
-    <h1>Catalog: @Model.CategoryName</h1>
-    <!-- Navigation Breadcrump -->
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-                <a class="text-secondary" asp-controller="Home" asp-action="Index">Home</a>
-            </li>
-            <li class="breadcrumb-item active text-dark" aria-current="page">
-                @Model.CategoryName
-            </li>
-        </ol>
-    </nav>
-    <!-- Consistent grid system -->
-    <div class="row row-cols-1 row-cols-md-3 g-3">
-        @foreach (var productCardVM in Model.Products)
-        {
-            <div class="col">
-                @await Html.PartialAsync("_ProductCardPartial", productCardVM)
+<div class="container-fluid px-0">
+    <div class="row g-0">
+        <!-- Filter Sidebar -->
+        <div class="col-lg-3 d-none d-lg-block bg-white border-end filter-sidebar-col">
+            <h2 class="fw-bold mb-3 px-3 px-lg-4 pt-3">@Model.CategoryName</h2>
+            @await Html.PartialAsync("_FilterSidebarPartial")
+        </div>
+        <!-- Products -->
+        <div class="col-lg-9 px-3 px-md-4 px-lg-4 py-4">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">
+                        <a class="text-dark text-decoration-none" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home me-1"></i>Home
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.CategoryName</li>
+                </ol>
+            </nav>
+            <h2 class="fw-bold mb-4 d-lg-none">@Model.CategoryName</h2>
+            <div class="row g-3 g-lg-4">
+                @foreach (var productCardVM in Model.Products)
+                {
+                    <div class="col-12 col-sm-6 col-lg-4">
+                        @await Html.PartialAsync("_ProductCardPartial", productCardVM)
+                    </div>
+                }
             </div>
-        }
+        </div>
     </div>
 </div>
 

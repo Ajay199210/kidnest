@@ -1,70 +1,79 @@
-﻿@model List<KidNest.Services.DTOs.ShoppingCart.CartItemDTO>
+@model List<KidNest.Services.DTOs.ShoppingCart.CartItemDTO>
 
 @if (Model.Count > 0)
 {
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <strong class="fs-5">Total:</strong>
-        <span id="cart-total" class="fs-4 fw-semibold">$0.00</span>
+    <!-- Cart Summary & Actions (sticky top) -->
+    <div class="p-3 border-bottom bg-white">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="text-muted small">@Model.Sum(i => i.Quantity) item(s)</span>
+            <span id="cart-total" class="fs-5 fw-bold">$0.00</span>
+        </div>
+        <div class="d-flex gap-2">
+            <button id="checkoutBtn" class="btn btn-cart rounded-pill flex-grow-1 fw-semibold">
+                <i class="fas fa-credit-card me-1"></i> Checkout
+            </button>
+            <button id="clearCartBtn" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                <i class="fa-solid fa-trash"></i>
+            </button>
+        </div>
     </div>
 
-    <div class="d-flex justify-content-between mb-3">
-        <button id="checkoutBtn" class="btn btn-warning btn-md rounded-pill">
-            Checkout
-        </button>
-        <button id="clearCartBtn" class="btn btn-outline-danger btn-sm rounded-pill">
-            <i class="fa-solid fa-trash"></i> Clear Cart
-        </button>
-    </div>
-
-    <ul class="list-group" id="cartItemsList">
+    <!-- Cart Items List -->
+    <ul class="list-group list-group-flush" id="cartItemsList">
         @foreach (var item in Model)
         {
-            <li class="list-group-item d-flex flex-column mb-3 border-0 border-top rounded-0 pt-3"
+            <li class="list-group-item px-3 py-3"
                 data-id="@item.ProductId"
                 data-color-id="@(item.ColorId.HasValue ? item.ColorId.ToString() : "null")"
                 data-size-id="@(item.SizeId.HasValue ? item.SizeId.ToString() : "null")">
 
-                <!-- Product Info Section -->
-                <div class="d-flex justify-content-between align-items-center cart-item">
+                <!-- Product Info -->
+                <div class="d-flex gap-3 align-items-start cart-item">
                     <!-- Product Image -->
                     <img src="@item.ProductImage"
-                         class="rounded img-fluid"
+                         class="rounded-3 border"
                          alt="@item.ProductName"
-                         style="width: 75px; height: 75px;">
+                         style="width: 65px; height: 65px; object-fit: cover;">
 
-                    <!-- Product name & color/size -->
-                    <div class="d-flex flex-column ms-2">
-                        <span class="fw-bold">@item.ProductName</span>
-                        <div class="text-muted small d-flex flex-column">
+                    <!-- Details -->
+                    <div class="flex-grow-1 min-width-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <span class="fw-semibold small text-truncate d-block" style="max-width: 180px;">@item.ProductName</span>
+                            <button class="btn btn-link btn-sm text-danger p-0 ms-2 delete-item-btn">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                        <div class="text-muted small">
                             @if (!string.IsNullOrEmpty(item.Color))
                             {
-                                <span class="selected-color">Color: @item.Color</span>
+                                <span class="selected-color me-2">
+                                    <i class="fas fa-palette me-1" style="font-size: 0.65rem;"></i>@item.Color
+                                </span>
                             }
                             @if (!string.IsNullOrEmpty(item.Size))
                             {
-                                <span class="selected-size">Size: @item.Size</span>
+                                <span class="selected-size">
+                                    <i class="fas fa-ruler-horizontal me-1" style="font-size: 0.65rem;"></i>@item.Size
+                                </span>
                             }
                         </div>
+
+                        <!-- Price & Quantity Row -->
+                        <div class="d-flex justify-content-between align-items-center mt-2">
+                            <span class="item-price fw-semibold" data-price="@item.ProductPrice">
+                                <span class="item-quantity">@item.Quantity</span> x @item.ProductPrice.ToString("C")
+                            </span>
+
+                            <!-- Quantity Controls -->
+                            <div class="input-group input-group-sm cart-qty-group">
+                                <button class="btn btn-outline-secondary decrement-btn rounded-start-pill" type="button">−</button>
+                                <div class="border text-center cart-qty-text" data-max="@item.StockQuantity">
+                                    <span>@item.Quantity</span>
+                                </div>
+                                <button class="btn btn-outline-secondary increment-btn rounded-end-pill" type="button">+</button>
+                            </div>
+                        </div>
                     </div>
-
-                    <!-- Price -->
-                    <span class="item-price ms-auto" data-price="@item.ProductPrice">
-                        <span class="item-quantity">@item.Quantity</span> x @item.ProductPrice.ToString("C")
-                    </span>
-
-                    <!-- Delete Button -->
-                    <button class="btn btn-outline-danger btn-sm delete-item-btn ms-2">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
-                </div>
-
-                <!-- Quantity Control Section -->
-                <div class="input-group input-group-sm w-auto mt-3">
-                    <button class="btn btn-outline-secondary decrement-btn rounded-pill" type="button">−</button>
-                    <div class="border text-center cart-qty-text w-75 m-auto rounded-pill" data-max="@item.StockQuantity">
-                        <span>@item.Quantity</span>
-                    </div>
-                    <button class="btn btn-outline-secondary increment-btn rounded-pill" type="button">+</button>
                 </div>
             </li>
         }
@@ -72,5 +81,9 @@
 }
 else
 {
-    <p>Your cart is empty.</p>
+    <div class="text-center py-5 px-3">
+        <i class="fas fa-shopping-cart fs-1 mb-3 d-block" style="color: var(--bs-gray-300);"></i>
+        <p class="text-muted fw-semibold mb-1">Your cart is empty</p>
+        <p class="text-muted small">Browse our products and add items to your cart!</p>
+    </div>
 }

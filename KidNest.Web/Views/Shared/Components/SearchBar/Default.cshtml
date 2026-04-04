@@ -1,29 +1,37 @@
 ﻿@model KidNest.Web.ViewModels.Components.SearchBarViewModel
 
 <form asp-controller="Home" asp-action="Index" method="get" class="w-100">
-    <div class="input-group rounded-pill">
+    <div class="search-bar">
         <input type="hidden" name="categoryId" id="categoryIdInput" value="@Model.SelectedCategoryId" />
 
-        <button class="btn btn-secondary dropdown-toggle rounded-start-pill text-bg-light category-btn-filter"
-                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            @(Model.Categories.FirstOrDefault(c => c.Id == Model.SelectedCategoryId)?.Name ?? "All")
-        </button>
+        <div class="input-group">
+            <!-- Category Filter -->
+            <button class="btn dropdown-toggle search-category-btn border-0"
+                    type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Filter by category">
+                <i class="fa-solid fa-bars me-1 d-none d-sm-inline"></i>
+                <span class="category-label">@(Model.Categories.FirstOrDefault(c => c.Id == Model.SelectedCategoryId)?.Name ?? "All")</span>
+            </button>
 
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item category-option" href="#" data-id="">All</a></li>
-            @foreach (var category in Model.Categories)
-            {
-                <li>
-                    <a class="dropdown-item category-option" href="#" data-id="@category.Id">@category.Name</a>
-                </li>
-            }
-        </ul>
+            <ul class="dropdown-menu shadow-sm">
+                <li><a class="dropdown-item category-option" href="#" data-id="">All Categories</a></li>
+                <li><hr class="dropdown-divider"></li>
+                @foreach (var category in Model.Categories)
+                {
+                    <li>
+                        <a class="dropdown-item category-option" href="#" data-id="@category.Id">@category.Name</a>
+                    </li>
+                }
+            </ul>
 
-        <input type="text" name="query" class="form-control" value="@Model.SearchTerm" 
-            placeholder="Search products..." />
+            <!-- Search Input -->
+            <input type="text" name="query" class="form-control search-input border-0"
+                   value="@Model.SearchTerm"
+                   placeholder="What are you looking for?" />
 
-        <button type="submit" class="input-group-text rounded-end-pill btn btn-primary">
-            <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
+            <!-- Search Button -->
+            <button type="submit" class="btn search-submit-btn border-0" aria-label="Search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
     </div>
 </form>

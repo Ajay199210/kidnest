@@ -244,7 +244,7 @@ namespace KidNest.Web.Controllers
                 return RedirectToAction(nameof(Index), "Home");
             }
 
-            if (result.Errors.Count == 0)
+            if (result.Errors.Count > 0)
             {
                 foreach (var error in result.Errors)
                 {

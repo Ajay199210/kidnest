@@ -15,7 +15,12 @@ namespace KidNest.Web.ViewModels.Home
         [DisplayFormat(DataFormatString = "{0:F2}")]
         public decimal Price { get; set; }
         public decimal? Discount { get; set; }
-        public string? ImagePath { get; set; }
+        private string? _imagePath;
+        public string? ImagePath
+        {
+            get => string.IsNullOrWhiteSpace(_imagePath) ? "/img/no-img.jpg" : _imagePath;
+            set => _imagePath = value;
+        }
         
         public int Quantity { get; set; }
 

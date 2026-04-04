@@ -1,89 +1,108 @@
-﻿@model List<KidNest.Web.ViewModels.Orders.OrderIndexViewModel>
+@model List<KidNest.Web.ViewModels.Orders.OrderIndexViewModel>
 
 @{
-    ViewData["Title"] = "History";
+    ViewData["Title"] = "Order History";
 }
 
-<div class="container min-vh-100 d-flex justify-content-center align-items-center">
-    <div class="row w-100 justify-content-center">
-        <div class="col-md-10 col-lg-8 m-4 p-5 pb-4 form-container rounded-5 rounded-sm-0">
+<div class="auth-page min-vh-100 d-flex justify-content-center align-items-start py-4 py-md-5">
+    <div class="row w-100 justify-content-center px-2 px-md-3">
+        <div class="auth-form-card rounded-4 p-3 p-md-4" style="max-width: 650px; width: 100%;">
             @if (Model.Count > 0)
             {
+                <!-- Header -->
                 <div class="text-center mb-4">
-                    <h2 class="display-6">Orders History</h2>
-                    <p class="fw-light fs-5">Click on an order to view it's details.</p>
+                    <i class="fas fa-receipt fs-2 d-block mb-2" style="color: var(--bs-primary-text-emphasis);"></i>
+                    <h2 class="fw-bold">Order History</h2>
+                    <p class="text-muted small mb-0">Tap an order to view its details.</p>
                 </div>
 
+                <!-- Orders -->
                 <div class="accordion" id="ordersAccordion">
                     @foreach (var order in Model)
                     {
                         var collapseId = $"collapseOrder-{order.Id}";
                         var headingId = $"headingOrder-{order.Id}";
 
-                        <div class="accordion-item mb-2">
+                        var statusColor = order.Status switch
+                        {
+                            "Completed" => "success",
+                            "Cancelled" => "danger",
+                            "Processing" => "warning",
+                            _ => "secondary"
+                        };
+
+                        <div class="accordion-item border rounded-3 mb-3 overflow-hidden shadow-sm">
                             <h2 class="accordion-header" id="@headingId">
-                                <button class="accordion-button collapsed" type="button"
+                                <button class="accordion-button collapsed py-3" type="button"
                                         data-bs-toggle="collapse"
                                         data-bs-target="#@collapseId"
                                         aria-expanded="false"
                                         aria-controls="@collapseId">
-                                    <div class="d-flex flex-column w-100">
-                                        <div><strong>Order #@order.Id</strong> - @order.OrderDate?.ToString("yyyy-MM-dd")</div>
-                                        <small class="text-muted">Status: @order.Status - Items: @order.OrderItemsCount</small>
-                                        <small>Total: @order.OrderTotalPrice.ToString("C")</small>
+                                    <div class="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center w-100 me-3 gap-1">
+                                        <div>
+                                            <span class="fw-bold">Order #@order.Id</span>
+                                            <span class="text-muted small ms-2">
+                                                <i class="fas fa-calendar-alt me-1"></i>@order.OrderDate?.ToString("MMM dd, yyyy")
+                                            </span>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge rounded-pill bg-@statusColor bg-opacity-10 text-@statusColor border border-@statusColor small">
+                                                @order.Status
+                                            </span>
+                                            <span class="fw-bold">@order.OrderTotalPrice.ToString("C")</span>
+                                        </div>
                                     </div>
                                 </button>
                             </h2>
                             <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headingId">
-                                <div class="accordion-body bg-body-tertiary rounded">
-                                    <div class="row g-3">
+                                <div class="accordion-body p-3">
+                                    <div class="small text-muted mb-3">
+                                        <i class="fas fa-box me-1"></i> @order.OrderItemsCount item(s)
+                                    </div>
+                                    <div class="d-flex flex-column gap-2">
                                         @foreach (var item in order.OrderItems)
                                         {
-                                            <div class="col-md-6">
-                                                <div class="card shadow border-0 rounded">
-                                                    <div class="card-body">
-                                                        <h6 class="card-title text-decoration-underline">@item.ProductName</h6>
-                                                        <p class="card-text mb-1">
-                                                            <strong>Quantity:</strong> @item.Quantity
-                                                        </p>
-                                                        <p class="card-text mb-1">
-                                                            <strong>Color:</strong>
-                                                            @if(item.Color != null)
-                                                            {
-                                                                <span style="background-color:@item.ColorHex;" class="p-1 rounded text-light">@item.Color</span>
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="text-muted">N/A</span>
-                                                            }
-                                                        </p>
-                                                        <p class="card-text mb-1">
-                                                            <strong>Size:</strong>
-                                                            @if(item.Size != null)
-                                                            {
-                                                                @item.Size
-                                                            }
-                                                            else
-                                                            {
-                                                                <span class="text-muted">N/A</span>
-                                                            }
-                                                        </p>
-                                                        <p class="card-text mb-1">
-                                                            <strong>Unit Price:</strong> @item.Price.ToString("C")
-                                                        </p>
-                                                        @if(@item.Discount > 0)
+                                            <div class="d-flex flex-column flex-sm-row align-items-sm-center gap-1 gap-sm-3 p-2 rounded-3 bg-light">
+                                                <div class="flex-grow-1 min-width-0">
+                                                    <a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId"
+                                                       class="fw-semibold small text-dark text-decoration-none">
+                                                        @item.ProductName
+                                                    </a>
+                                                    <div class="d-flex flex-wrap gap-2 mt-1">
+                                                        <span class="text-muted" style="font-size: 0.75rem;">
+                                                            Qty: @item.Quantity
+                                                        </span>
+                                                        @if (item.Color != null)
                                                         {
-                                                            <p class="card-text mb-1">
-                                                                <strong>Discounted:</strong> @item.DiscountedPrice.ToString("C") (@item.Discount%)
-                                                            </p>
+                                                            <span class="text-muted" style="font-size: 0.75rem;">
+                                                                <span class="d-inline-block rounded-circle border me-1"
+                                                                      style="width: 10px; height: 10px; background-color: @item.ColorHex; vertical-align: middle;"></span>@item.Color
+                                                            </span>
                                                         }
-                                                        <p class="card-text">
-                                                            <strong>Total:</strong> @item.TotalPrice.ToString("C")
-                                                        </p>
+                                                        @if (item.Size != null)
+                                                        {
+                                                            <span class="badge border text-muted bg-white" style="font-size: 0.7rem;">@item.Size</span>
+                                                        }
+                                                        @if (item.Discount > 0)
+                                                        {
+                                                            <span class="badge text-bg-warning" style="font-size: 0.7rem;">-@item.Discount%</span>
+                                                        }
                                                     </div>
+                                                </div>
+                                                <div class="text-end text-nowrap">
+                                                    @if (item.Discount > 0)
+                                                    {
+                                                        <span class="text-muted text-decoration-line-through small d-block">@item.Price.ToString("C")</span>
+                                                    }
+                                                    <span class="fw-bold small">@item.TotalPrice.ToString("C")</span>
                                                 </div>
                                             </div>
                                         }
+                                    </div>
+                                    <!-- Order Total -->
+                                    <div class="d-flex justify-content-end align-items-center mt-3 pt-2 border-top">
+                                        <span class="text-muted small me-2">Total:</span>
+                                        <span class="fw-bold fs-6">@order.OrderTotalPrice.ToString("C")</span>
                                     </div>
                                 </div>
                             </div>
@@ -93,50 +112,16 @@
             }
             else
             {
-                <div class="text-center mb-3">
-                    <h2 class="display-6">Orders History</h2>
-                    <hr />
-                    <p class="fw-light fs-4 fst-italic m-0">
-                        You haven't placed any orders yet.
-                        Browse our store to discover great products just for you!
-                    </p>
+                <!-- Empty State -->
+                <div class="text-center py-5">
+                    <i class="fas fa-shopping-bag fs-1 d-block mb-3" style="color: var(--bs-gray-300);"></i>
+                    <h2 class="fw-bold mb-2">No orders yet</h2>
+                    <p class="text-muted mb-4">You haven't placed any orders yet. Browse our store to discover great products!</p>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-cart rounded-pill px-4 py-2 fw-semibold">
+                        <i class="fas fa-store me-1"></i> Start Shopping
+                    </a>
                 </div>
             }
         </div>
     </div>
 </div>
-
-<style>
-    .container {
-        background-image: url("../../img/store/store.png");
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-attachment: fixed;
-        max-width: 100%;
-        position: relative;
-    }
-
-        .container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #000;
-            opacity: 0.5;
-            z-index: -1;
-        }
-
-    .form-container {
-        background-color: rgba(var(--bs-primary-rgb), 0.9);
-        color: black;
-        width: 100%;
-        max-width: 900px;
-    }
-
-    .accordion-button > div {
-        text-align: left;
-    }
-</style>

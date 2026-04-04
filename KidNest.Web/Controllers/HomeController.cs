@@ -1,10 +1,7 @@
 using KidNest.Services.DTOs.Products;
 using KidNest.Services.Interfaces;
-using KidNest.Services.Services;
 using KidNest.Web.ViewModels;
 using KidNest.Web.ViewModels.Home;
-using KidNest.Web.ViewModels.MD.Colors;
-using KidNest.Web.ViewModels.MD.Sizes;
 using KidNest.Web.ViewModels.Products;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -66,7 +63,7 @@ namespace KidNest.Web.Controllers
                             Description = categoryDTO.Description,
                             Products = productsDTO
                                 .OrderByDescending(p => p.Name)
-                                .Take(3)  // limit to 3 for display
+                                .Take(4)  // limit to 3 for display
                                 .Select(p => new ProductCardViewModel
                                 {
                                     Id = p.Id,
@@ -75,8 +72,8 @@ namespace KidNest.Web.Controllers
                                     Discount = p.Discount,
                                     Quantity = p.Quantity,
                                     Description = p.Description ?? "N/A",
-                                    ImagePath = p.ImagePath ?? "./img/no-img.jpg",
-                                    Variants = p.VariantDTOs.Select(v => new ProductVariantViewModel 
+                                    ImagePath = p.ImagePath,
+                                    Variants = p.VariantDTOs.Select(v => new ProductVariantViewModel
                                     {
                                         Id = v.Id,
                                         Color = v.ColorName,
@@ -126,7 +123,7 @@ namespace KidNest.Web.Controllers
                         Discount = p.Discount,
                         Quantity = p.Quantity,
                         Description = p.Description ?? "N/A",
-                        ImagePath = p.ImagePath ?? "./img/no-img.jpg",
+                        ImagePath = p.ImagePath,
                         Variants = p.VariantDTOs.Select(v => new ProductVariantViewModel
                         {
                             Id = v.Id,

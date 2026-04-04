@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - KidNest</title>
     <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Nunito:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" />
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.min.css" />
     <link rel="stylesheet" href="~/css/bootstrap.css" />
@@ -24,17 +27,38 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer bg-light border-top">
+    <footer class="footer bg-white border-top shadow-sm">
         @await Html.PartialAsync("_Footer")
     </footer>
 
     <!-- Back to top -->
-    <a href="#" id="backToTopBtn" class="btn btn-secondary position-fixed bottom-0 end-0 m-1 p-1 rounded-3 shadow d-none">
-        &uarr; Top
-    </a>
+    <button id="backToTopBtn" class="btn back-to-top-btn position-fixed shadow-lg d-none" aria-label="Back to top">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <!-- Floating Filter Button (mobile only) -->
+    <button class="btn filter-float-btn position-fixed shadow-lg d-lg-none d-none"
+            id="filterFloatBtn"
+            data-bs-toggle="offcanvas" data-bs-target="#filterOffcanvas"
+            aria-label="Open filters">
+        <i class="fas fa-sliders"></i>
+    </button>
 
     <!-- Alerts & Toast Notification Containers -->
     @await Html.PartialAsync("_Notification")
+
+    <!-- Filter Offcanvas (mobile) -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="filterOffcanvas" aria-labelledby="filterOffcanvasLabel">
+        <div class="offcanvas-header border-bottom">
+            <h5 class="offcanvas-title fw-bold" id="filterOffcanvasLabel">
+                <i class="fas fa-sliders me-2"></i>Filters
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+            @await Html.PartialAsync("_FilterSidebarPartial")
+        </div>
+    </div>
 
     <!-- Cart Offcanvas -->
     @await Component.InvokeAsync("CartOffcanvas")

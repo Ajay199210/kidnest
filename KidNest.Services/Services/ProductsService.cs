@@ -125,7 +125,7 @@ namespace KidNest.Services.Services
                 Discount = p.Discount,
                 Quantity = p.Quantity,
                 Barcode = p.Barcode,
-                ImagePath = p.ImagePath ?? "./img/no-img.jpg"
+                ImagePath = p.ImagePath
             }).ToList();
         }
 
@@ -394,7 +394,7 @@ namespace KidNest.Services.Services
                 Discount = p.Discount,
                 Quantity = p.Quantity,
                 Barcode = p.Barcode,
-                ImagePath = p.ImagePath ?? "./img/no-img.jpg",
+                ImagePath = p.ImagePath,
                 VariantDTOs = p.ProductVariants.Select(v => new ProductVariantDTO
                 {
                     Id = v.Id,
@@ -424,7 +424,7 @@ namespace KidNest.Services.Services
                 Discount = p.Discount,
                 Quantity = p.Quantity,
                 Barcode = p.Barcode,
-                ImagePath = p.ImagePath ?? "./img/no-img.jpg",
+                ImagePath = p.ImagePath,
                 VariantDTOs = p.ProductVariants.Select(v => new ProductVariantDTO
                 {
                     Id = v.Id,

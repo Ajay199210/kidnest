@@ -1,12 +1,75 @@
-﻿@model KidNest.Web.ViewModels.Products.ProductsGridViewModel
+@model KidNest.Web.ViewModels.Products.ProductsGridViewModel
 
-@* <div class="container-fluid gallery p-3 p-md-0 ps-md-5"> *@
-<div class="container-fluid gallery">
-    <div class="row">
-        <!-- Products Grid -->
-        <div class="col-md-10 my-3">
-            <h1 class="mx-auto text-center px-4 py-2 my-4 fw-bold bg-gradient border-top border-bottom shadow w-50 w-lg-25">@Model.Title</h1>
-            <div class="row g-3 my-3 mx-4">
+@{
+    var bannerClass = Model.Title switch
+    {
+        "New Releases" => "banner-img-new-releases",
+        "Hot Deals" => "banner-img-hot-deals",
+        _ => ""
+    };
+    var hasImage = !string.IsNullOrEmpty(bannerClass);
+}
+
+<div class="container-fluid px-0">
+    @if (hasImage)
+    {
+        <!-- Full-width Image Banner -->
+        <div class="products-grid-banner text-center py-5 px-3 position-relative overflow-hidden @bannerClass">
+            <div class="position-relative" style="z-index: 1;">
+                <i class="fas @(Model.Title == "Hot Deals" ? "fa-fire" : "fa-star") fs-2 mb-2 d-block text-white"></i>
+                <h1 class="fw-bold mb-1 text-white" style="font-family: 'Dancing Script', cursive; font-size: 2.2rem;">
+                    @Model.Title
+                </h1>
+                <div class="d-flex justify-content-center align-items-center gap-2 mt-2">
+                    <span class="d-inline-block rounded-pill" style="width: 40px; height: 3px; background-color: rgba(255,255,255,0.6);"></span>
+                    <span class="d-inline-block rounded-circle" style="width: 8px; height: 8px; background-color: rgba(255,255,255,0.6);"></span>
+                    <span class="d-inline-block rounded-pill" style="width: 40px; height: 3px; background-color: rgba(255,255,255,0.6);"></span>
+                </div>
+                <p class="mt-2 mb-0 text-white fs-6 fw-medium" style="max-width: 480px; margin-left: auto; margin-right: auto;">
+                    @if (Model.Title == "Hot Deals")
+                    {
+                        <span>Grab the best deals before they're gone! Hand-picked discounts on your little one's favorites.</span>
+                    }
+                    else
+                    {
+                        <span>Fresh arrivals just landed! Discover the latest styles and trends for your little ones.</span>
+                    }
+                </p>
+            </div>
+        </div>
+    }
+
+    <div class="row g-0">
+        <!-- Filter Sidebar -->
+        <div class="col-lg-3 d-none d-lg-block bg-white border-end filter-sidebar-col">
+            @await Html.PartialAsync("_FilterSidebarPartial")
+        </div>
+        <!-- Products -->
+        <div class="col-lg-9 px-3 px-md-4 px-lg-4 py-3">
+            @if (!hasImage)
+            {
+                <!-- Default Banner (Search Results) -->
+                <div class="products-grid-banner text-center rounded-4 mb-4 py-5 py-md-5 px-3 position-relative overflow-hidden">
+                    <span class="banner-circle banner-circle-1"></span>
+                    <span class="banner-circle banner-circle-2"></span>
+                    <span class="banner-circle banner-circle-3"></span>
+                    <div class="position-relative" style="z-index: 1;">
+                        <i class="fas fa-magnifying-glass fs-3 mb-2 d-block" style="color: var(--bs-primary-text-emphasis);"></i>
+                        <h1 class="fw-bold mb-1" style="font-family: 'Dancing Script', cursive; font-size: 2.2rem;">
+                            @Model.Title
+                        </h1>
+                        <div class="d-flex justify-content-center align-items-center gap-2 mt-2">
+                            <span class="d-inline-block rounded-pill" style="width: 40px; height: 3px; background-color: var(--bs-primary);"></span>
+                            <span class="d-inline-block rounded-circle" style="width: 8px; height: 8px; background-color: var(--bs-primary);"></span>
+                            <span class="d-inline-block rounded-pill" style="width: 40px; height: 3px; background-color: var(--bs-primary);"></span>
+                        </div>
+                        <p class="mt-2 mb-0 text-muted" style="max-width: 480px; margin-left: auto; margin-right: auto;">
+                            @Model.Products.Count product@(Model.Products.Count != 1 ? "s" : "") found
+                        </p>
+                    </div>
+                </div>
+            }
+            <div class="row g-3 g-lg-4">
                 @foreach (var productCardVM in Model.Products)
                 {
                     <div class="col-12 col-sm-6 col-lg-4">
@@ -15,14 +78,5 @@
                 }
             </div>
         </div>
-
-        <!-- Ads Aside -->
-        @await Component.InvokeAsync("AdsMenu")
     </div>
 </div>
-
-<style>
-    h1 {
-        font-family: 'Dancing Script', cursive;
-    }
-</style>
