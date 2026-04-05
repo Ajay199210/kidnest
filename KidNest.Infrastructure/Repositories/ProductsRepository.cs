@@ -1,10 +1,6 @@
 ﻿using KidNest.Core.Entities;
 using KidNest.Core.Interfaces;
-using KidNest.Core.Shared;
-using System.Data;
 using System.Data.SqlClient;
-using System.Text;
-using System.Xml.Linq;
 
 namespace KidNest.Infrastructure.Repositories
 {
@@ -69,8 +65,11 @@ namespace KidNest.Infrastructure.Repositories
                     {
                         foreach (var variant in product.ProductVariants)
                         {
+                            variant.ProductId = productId;
+
                             string variantQuery = @"INSERT INTO [dbo].[ProductVariants] (
                                 ProductVariantProductId,
+                                ProductVariantKey,
                                 ProductVariantColorId,
                                 ProductVariantSizeId,
                                 ProductVariantCategoryId,
@@ -81,6 +80,7 @@ namespace KidNest.Infrastructure.Repositories
                                 ProductVariantIsActive)
                                 VALUES (
                                     @ProductId,
+                                    @ProductVariantKey,
                                     @ColorId,
                                     @SizeId,
                                     @CategoryId,
@@ -94,10 +94,11 @@ namespace KidNest.Infrastructure.Repositories
                             using (var variantCommand = new SqlCommand(variantQuery, connection, transaction))
                             {
                                 variantCommand.Parameters.AddWithValue("@ProductId", productId);
+                                variantCommand.Parameters.AddWithValue("@ProductVariantKey", variant.Key);
                                 variantCommand.Parameters.AddWithValue("@ColorId", (object?)variant.ColorId ?? DBNull.Value);
                                 variantCommand.Parameters.AddWithValue("@SizeId", (object?)variant.SizeId ?? DBNull.Value);
                                 variantCommand.Parameters.AddWithValue("@CategoryId", product.CategoryId); // or variant.CategoryId
-                                variantCommand.Parameters.AddWithValue("@Barcode", string.IsNullOrEmpty(variant.Barcode) ? 
+                                variantCommand.Parameters.AddWithValue("@Barcode", string.IsNullOrEmpty(variant.Barcode) ?
                                     DBNull.Value : variant.Barcode);
                                 variantCommand.Parameters.AddWithValue("@Quantity", variant.Quantity);
                                 variantCommand.Parameters.AddWithValue("@CreatedDate", variant.CreatedDate);
@@ -935,7 +936,7 @@ namespace KidNest.Infrastructure.Repositories
                             insertCommand.Parameters.AddWithValue("@Barcode", variant.Barcode ?? (object)DBNull.Value);
                             insertCommand.Parameters.AddWithValue("@Quantity", variant.Quantity);
                             insertCommand.Parameters.AddWithValue("@IsActive", variant.IsActive);
-                            
+
                             await insertCommand.ExecuteNonQueryAsync();
                         }
                     }
@@ -1397,7 +1398,7 @@ namespace KidNest.Infrastructure.Repositories
                     OR p.ProductQuantity LIKE @searchValue
                     OR p.ProductBarcode LIKE @searchValue";
             }
-          
+
             string countQuery = $@"
                 SELECT COUNT(*) FROM [dbo].[Products]  AS p 
                 INNER JOIN [dbo].[Categories] AS c ON p.CategoryId = c.CategoryId {whereClause}";

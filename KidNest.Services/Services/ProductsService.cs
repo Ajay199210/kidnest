@@ -1,13 +1,8 @@
 ﻿using KidNest.Core.Entities;
 using KidNest.Core.Interfaces;
 using KidNest.Core.Shared;
-using KidNest.Services.DTOs.MD;
 using KidNest.Services.DTOs.Products;
-using KidNest.Services.Extensions;
 using KidNest.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Linq;
 
 namespace KidNest.Services.Services
 {

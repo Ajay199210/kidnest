@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Start the connection to the SignalR hub
     connection.start().catch(function (err) {
-        return console.error(err.toString());
+        //return console.error(err.toString());
+        return console.error("An error has occurred");
     });
 
     // Activate product zoom on selected images
@@ -399,7 +400,7 @@ function updateMaxQuantity(container) {
             applyMax(variants);
         },
         error: function () {
-            console.warn('Error fetching product variants');
+            console.warn('Error fetching product(s)');
         }
     });
 }
@@ -425,7 +426,6 @@ function fetchVariantId($item) {
                 $item.data('serialized', serialized);
                 //console.log($item);
             } else {
-                console.warn(response.message || 'Variant not found.');
                 throw new Error('Variant not found.');
             }
         });
@@ -729,7 +729,7 @@ $(document).on('click', '.delete-item-btn', function () {
         },
         error: function (xhr, status, error) {
             $btn.prop('disabled', false).html('<i class="fa-solid fa-xmark"></i>');
-            console.error('Error removing item from cart:', error);
+            console.error('Error removing item from cart');
         }
     });
 });

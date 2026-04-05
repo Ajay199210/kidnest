@@ -1,6 +1,4 @@
-﻿using KidNest.Services.DTOs.MD;
-
-namespace KidNest.Services.DTOs.Products
+﻿namespace KidNest.Services.DTOs.Products
 {
     public class ProductDTO
     {

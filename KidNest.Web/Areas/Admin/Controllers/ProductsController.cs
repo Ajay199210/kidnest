@@ -1,13 +1,9 @@
-﻿using KidNest.Core.Entities;
-using KidNest.Core.Shared;
+﻿using KidNest.Core.Shared;
 using KidNest.Services.DTOs.Products;
 using KidNest.Services.Extensions;
 using KidNest.Services.Interfaces;
-using KidNest.Services.Services;
 using KidNest.Web.Hubs;
 using KidNest.Web.Models;
-using KidNest.Web.ViewModels.MD.Colors;
-using KidNest.Web.ViewModels.MD.Sizes;
 using KidNest.Web.ViewModels.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +25,7 @@ namespace KidNest.Web.Areas.Admin.Controllers
         private readonly IMdSizesService _mdSizesService;
 
         public ProductsController(IProductsService productsService, ICategoriesService categoriesService,
-            IHubContext<StoreHub> hubContext, IFileStorageService fileStorageService, 
+            IHubContext<StoreHub> hubContext, IFileStorageService fileStorageService,
             IMdColorsService mdColorsService, IMdSizesService mdSizesService)
         {
             _productsService = productsService;
@@ -129,7 +125,7 @@ namespace KidNest.Web.Areas.Admin.Controllers
             {
                 Categories = await _categoriesService.GetCategoriesSelectListAsync(),
             };
-            
+
             await PopulateSelectListsAsync(productCreateVM);
 
             return View(productCreateVM);
@@ -183,7 +179,7 @@ namespace KidNest.Web.Areas.Admin.Controllers
 
                 if (!result.Success)
                 {
-                   ModelState.AddErrors(result);
+                    ModelState.AddErrors(result);
 
                     productCreateVM.Categories = await _categoriesService.GetCategoriesSelectListAsync();
                     await PopulateSelectListsAsync(productCreateVM);

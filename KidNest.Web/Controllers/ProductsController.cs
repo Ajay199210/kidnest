@@ -1,8 +1,6 @@
 ﻿using KidNest.Services.DTOs.Products;
 using KidNest.Services.Interfaces;
 using KidNest.Web.ViewModels.Home;
-using KidNest.Web.ViewModels.MD.Colors;
-using KidNest.Web.ViewModels.MD.Sizes;
 using KidNest.Web.ViewModels.Products;
 using Microsoft.AspNetCore.Mvc;
 
