@@ -127,6 +127,13 @@ builder.Services.Configure<IdentityOptions>(options =>
     //options.Password.RequiredUniqueChars = 1;
 });
 
+// Bundling and minification with WebOptimizer (production only via UseWebOptimizer placement)
+builder.Services.AddWebOptimizer(assetPipeline =>
+{
+    assetPipeline.MinifyCssFiles("css/styles.css", "css/admin.css");
+    assetPipeline.MinifyJsFiles("js/script.js", "js/login.js", "js/admin.js");
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -134,6 +141,8 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error/Generic");
     app.UseHsts();
+
+    app.UseWebOptimizer();
 }
 
 app.UseStatusCodePagesWithReExecute("/Error/{0}");
