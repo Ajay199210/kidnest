@@ -3,7 +3,9 @@
     ViewData["Title"] = "New Releases";
 }
 
-@await Html.PartialAsync("_ProductsGridPartial", Model)
+<section class="page-bg-gradient">
+    @await Html.PartialAsync("_ProductsGridPartial", Model)
+</section>
 
 <!-- Parallax Section -->
 @await Component.InvokeAsync("PublicSettings", new { section = "Parallax" })

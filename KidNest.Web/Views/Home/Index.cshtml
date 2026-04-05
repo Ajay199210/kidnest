@@ -7,7 +7,9 @@
 @if (Model.ProductsGrid != null)
 {
     <!-- Search Results Grid -->
-    @await Html.PartialAsync("_ProductsGridPartial", Model.ProductsGrid)
+    <section class="page-bg-gradient">
+        @await Html.PartialAsync("_ProductsGridPartial", Model.ProductsGrid)
+    </section>
 }
 else if (Model.Categories.Count > 0)
 {
@@ -53,7 +55,7 @@ else if (Model.Categories.Count > 0)
     </div><!-- /hero-wrapper -->
 
     <!-- Category Sections with Filter Sidebar -->
-    <div class="container-fluid px-0">
+    <div class="container-fluid px-0 page-bg-gradient">
         <div class="row g-0">
             <!-- Filter Sidebar -->
             <div class="col-lg-3 d-none d-lg-block bg-white border-end filter-sidebar-col">

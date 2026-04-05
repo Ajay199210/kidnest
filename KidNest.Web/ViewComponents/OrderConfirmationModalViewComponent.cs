@@ -14,7 +14,7 @@ namespace KidNest.Web.ViewComponents
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
-        
+
         {
             var cartItems = await Task.FromResult(_cartService.GetCart());
             var viewModel = new OrderCreateViewModel();

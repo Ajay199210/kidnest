@@ -3,11 +3,11 @@
     ViewData["Title"] = Model.CategoryName;
 }
 
+<section class="page-bg-gradient">
 <div class="container-fluid px-0">
     <div class="row g-0">
         <!-- Filter Sidebar -->
         <div class="col-lg-3 d-none d-lg-block bg-white border-end filter-sidebar-col">
-            <h2 class="fw-bold mb-3 px-3 px-lg-4 pt-3">@Model.CategoryName</h2>
             @await Html.PartialAsync("_FilterSidebarPartial")
         </div>
         <!-- Products -->
@@ -35,6 +35,7 @@
         </div>
     </div>
 </div>
+</section>
 
 <!-- Parallax Section -->
 @await Component.InvokeAsync("PublicSettings", new { section = "Parallax" })

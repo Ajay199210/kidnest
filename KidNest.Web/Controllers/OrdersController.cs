@@ -40,7 +40,7 @@ namespace KidNest.Web.Controllers
             }
 
             var orders = await _ordersService.GetOrdersByUserId(userId);
-           
+
             var viewModel = orders.Select(o => new OrderIndexViewModel
             {
                 Id = o.Id,
@@ -59,7 +59,7 @@ namespace KidNest.Web.Controllers
                     Size = oi.SizeCode,
                 }).ToList()
             }).ToList();
-                
+
             return View(viewModel);
         }
 
@@ -123,9 +123,12 @@ namespace KidNest.Web.Controllers
                 }
             }
 
-            return Json(new { success = false, 
+            return Json(new
+            {
+                success = false,
                 message = $"You have to be logged in to confirm your order! " +
-                $"<a href='/Account/Login' class='alert-link'>Login here</a>." }
+                $"<a href='/Account/Login' class='alert-link'>Login here</a>."
+            }
             );
         }
 

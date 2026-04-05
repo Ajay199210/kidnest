@@ -1,5 +1,4 @@
-﻿using KidNest.Services.DTOs.Products;
-using KidNest.Services.DTOs.ShoppingCart;
+﻿using KidNest.Services.DTOs.ShoppingCart;
 using KidNest.Services.Extensions;
 using KidNest.Services.Interfaces;
 using Microsoft.AspNetCore.Http;

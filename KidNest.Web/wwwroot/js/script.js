@@ -112,7 +112,7 @@ function showBootstrapToast(message) {
 }
 
 // Initiate product zoom
-function initProductZoom(selector = '.img-fluid.prod-img') {
+function initProductZoom(selector = '.prod-img') {
     // Check first if the 'elevateZoom' plugin is loaded and registered
     if ($(selector).length && $.fn.elevateZoom) {
         $(selector).elevateZoom({
@@ -158,7 +158,7 @@ function updateOrderModal() {
         let $item = $(this);
 
         let productId = $item.data('id');
-        let productName = $item.find('.fw-bold').text().trim();
+        let productName = $item.find('.fw-semibold').text().trim();
         let productQuantity = parseInt($item.find('.item-quantity').text().trim());
         let productPrice = parseFloat($item.find('.item-price').data('price'));
         let color = $item.find('.selected-color').text().replace('Color:', '').trim() || null;
@@ -590,7 +590,7 @@ $(document).on("click", ".add-to-cart", function () {
     // Prepare cart data
     const cartItem = {
         productId: btn.data("id"),
-        productName: btn.data("name"),
+        productName: String(btn.data("name")),
         productImage: btn.data("img"),
         productPrice: btn.data("price"),
         quantity: quantity,
@@ -938,7 +938,7 @@ $(document).on('click', '#btnBuyNow', function () {
 
     // Update modal with variant-specific product
     const orderItem = `
-        <li class="list-group-item d-flex justify-content-between align-items-center" data-key="${variantKey}">
+        <li class="list-group-item d-flex justify-content-between align-items-center" data-key="${variantKey}" data-id="${productId}">
             <div>
                 <span class="product-name">${productName}</span>
                 <span class="badge bg-secondary">x ${quantity}</span>

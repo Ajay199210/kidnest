@@ -403,5 +403,6 @@ FodyWeavers.xsd
 # User-uploaded/admin-managed content
 **/wwwroot/uploads/
 
-# Production secrets
+# App Settings Secrets
+appsettings.Development.json
 appsettings.Production.json
