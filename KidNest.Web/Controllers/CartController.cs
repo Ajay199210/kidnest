@@ -23,6 +23,7 @@ namespace KidNest.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart([FromBody] CartItemViewModel cartItemVM)
         {
             try
@@ -59,6 +60,7 @@ namespace KidNest.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult UpdateQuantity([FromBody] CartItemUpdateQuantityViewModel cartItemUpdateQuantityVM)
         {
             try
@@ -87,6 +89,7 @@ namespace KidNest.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult RemoveFromCart([FromBody] int productId)
         {
             _cartService.RemoveFromCart(productId);
@@ -96,6 +99,7 @@ namespace KidNest.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Clear()
         {
             _cartService.ClearCart();

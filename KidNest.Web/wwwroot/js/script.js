@@ -10,6 +10,8 @@
 
 document.addEventListener('DOMContentLoaded', function () {
 
+    const csrfToken = $('input[name="__RequestVerificationToken"]').val();
+
     // Set up SignalR connection
     const connection = new signalR.HubConnectionBuilder()
         .withUrl("/storeHub") // URL to the ProductHub endpoint
@@ -256,6 +258,7 @@ function updateCartQuantity(productId, quantity, colorId = null, sizeId = null, 
             sizeId: sizeId
         }), // Send the data as JSON
         contentType: 'application/json',
+        headers: { 'RequestVerificationToken': csrfToken },
         success: function (response) {
             if (response.success) {
                 //console.log('Cart updated');
@@ -607,6 +610,7 @@ $(document).on("click", ".add-to-cart", function () {
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(cartItem),
+        headers: { 'RequestVerificationToken': csrfToken },
         success: function (response) {
             if (response.success) {
                 $('#cartCount').text(response.itemCount);
@@ -637,6 +641,7 @@ $(document).on("click", "#clearCartBtn", function () {
     $.ajax({
         url: '/Cart/Clear',
         method: 'POST',
+        headers: { 'RequestVerificationToken': csrfToken },
         success: function (response) {
             if (response.success) {
                 resetCartUI();
@@ -719,6 +724,7 @@ $(document).on('click', '.delete-item-btn', function () {
         method: 'POST',
         data: JSON.stringify(productId),
         contentType: 'application/json',
+        headers: { 'RequestVerificationToken': csrfToken },
         success: function (response) {
             if (response.success) {
                 $listItem.fadeOut(300, function () {

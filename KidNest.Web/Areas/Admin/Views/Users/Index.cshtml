@@ -37,6 +37,7 @@
                     url: '@Url.Action("GetUsersData", "Users")',
                     type: 'POST',
                     contentType: 'application/json',
+                    headers: { 'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val() },
                     data: function (d) {
                         return JSON.stringify(d);
                     }

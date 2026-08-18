@@ -369,7 +369,6 @@ namespace KidNest.Services.Services
             _cache.Remove(attemptsKey);
 
             var otp = RandomNumberGenerator.GetInt32(100000, 999999).ToString();
-            Console.WriteLine(otp); // Remove in production
 
             _cache.Set($"otp:{emailOrPhone}", otp, TimeSpan.FromSeconds(60));
 
@@ -445,10 +444,13 @@ namespace KidNest.Services.Services
                 };
             }
 
-            // 5. Successful verification - cleanup
+            // 5. Successful verification - cleanup and set verified flag
             _cache.Remove(cacheKey);
             _cache.Remove(attemptsKey);
             _cache.Remove($"reset_lockout:{emailOrPhone}");
+
+            // Allow password reset for this contact for 10 minutes
+            _cache.Set($"reset_verified:{emailOrPhone}", true, TimeSpan.FromMinutes(10));
 
             return new VerifyOtpResponseDTO
             {
@@ -480,12 +482,11 @@ namespace KidNest.Services.Services
         {
             try
             {
-                // 1. Verify OTP status first (critical security check)
-                //var otpVerification = VerifyOtpCode(request.EmailOrPhone, request.Otp);
-                //if (!otpVerification.IsSuccess)
-                //{
-                //    return OperationResult.Fail(otpVerification.Message);
-                //}
+                // 1. Verify OTP was completed for this contact (critical security check)
+                if (!_cache.TryGetValue($"reset_verified:{emailOrPhone}", out bool isVerified) || !isVerified)
+                {
+                    return OperationResult.Fail("OTP verification required before resetting password.");
+                }
 
                 // 2. Get user by email/phone
                 var user = await _usersRepo.GetByEmailOrPhoneAsync(emailOrPhone);
@@ -523,9 +524,9 @@ namespace KidNest.Services.Services
 
                 if (isUpdated)
                 {
-                    // Cleanup: Invalidate OTP and any reset tokens
+                    // Cleanup: Invalidate OTP and verified flag (one-time use)
                     _cache.Remove($"otp:{emailOrPhone}");
-                    //_cache.Remove($"reset_token:{request.EmailOrPhone}");
+                    _cache.Remove($"reset_verified:{emailOrPhone}");
 
                     return OperationResult.Ok();
                 }
@@ -569,7 +570,7 @@ namespace KidNest.Services.Services
                 return criteria;
             }
 
-            if (options.RequireLowercase && !password.Any(char.IsDigit))
+            if (options.RequireLowercase && !password.Any(char.IsLower))
             {
                 return criteria;
             }

@@ -69,6 +69,8 @@
     <!-- NToast Notification Component -->
     @await Component.InvokeAsync("NToastNotify")
 
+    @Html.AntiForgeryToken()
+
     <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>

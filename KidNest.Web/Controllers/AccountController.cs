@@ -371,8 +371,7 @@ namespace KidNest.Web.Controllers
                 {
                     success = generateOtpResponse.IsSuccess,
                     isLockedOut = generateOtpResponse.IsLockedOut,
-                    message = generateOtpResponse.Message,
-                    otp = generateOtpResponse.OtpCode
+                    message = generateOtpResponse.Message
                 });
             }
             catch (Exception)
@@ -388,6 +387,7 @@ namespace KidNest.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public IActionResult VerifyOtp([FromBody] VerifyOtpRequestDTO verifyOtpRequestDTO)
         {
             try
